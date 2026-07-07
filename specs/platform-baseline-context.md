@@ -18,8 +18,8 @@ The **canonical platform baseline** for Retail Nucleus lives in the native-Speck
 - **Speckit branch:** `001-platform-baseline` (created by `.specify/scripts/powershell/create-new-feature.ps1`)
 - **Feature directory:** `knowledge/specs/001-platform-baseline/`
 - **Spec:** `knowledge/specs/001-platform-baseline/spec.md` (exists — `status: Approved`, Saad 07/07/2026)
-- **Plan:** `knowledge/specs/001-platform-baseline/plan.md` (exists — `status: Draft`, created via `/create-platform-plan`)
-- **Tasks:** `knowledge/specs/001-platform-baseline/tasks.md` (not yet created — via `/create-platform-tasks`)
+- **Plan:** `knowledge/specs/001-platform-baseline/plan.md` (exists — `status: Approved`, Saad 07/07/2026)
+- **Tasks:** `knowledge/specs/001-platform-baseline/tasks.md` (exists — `status: Draft`, created via `/create-platform-tasks`; analysis passed, no blocking issues)
 
 Future platform commands (`/create-platform-plan`, `/create-platform-tasks`, slice implementation, validation, finalization) **must use this context file** to locate the platform spec, plan, tasks, and Speckit branch. Do not assume the old fixed-path convention.
 
