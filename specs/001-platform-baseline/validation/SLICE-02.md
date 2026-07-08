@@ -1,7 +1,9 @@
 # Validation Report — SLICE-02: Focus Set Management
 
 **Date:** 2026-07-08  
-**Validated by:** Agent (automated)
+**Finalized:** 2026-07-09 (post-merge)  
+**Validated by:** Agent (automated)  
+**Status:** PASS — shipped
 
 ---
 
@@ -19,11 +21,15 @@
 
 ## Repo State
 
-| Repo        | Branch                    | Commit SHA (pre-commit)                  | State  |
+| Repo        | Branch / Merge target     | Commit SHA (merged)                      | State  |
 |-------------|---------------------------|------------------------------------------|--------|
-| knowledge   | 001-platform-baseline     | 1fa735afb763f512314eb1b836c2c34a804c8e70 | clean  |
-| frontend    | agent/slice-02-focus-sets | a9f42210541448f50c905a24df6e8452d85177ff | dirty (uncommitted SLICE-02 implementation) |
-| backend     | agent/slice-02-focus-sets | 21acafa8470032cd62c57cc93f86c8e8c71778fa | dirty (uncommitted SLICE-02 implementation) |
+| knowledge   | 001-platform-baseline     | 76de220 (contract + report)              | clean  |
+| frontend    | main (PR #3 merged)       | 9a2fa8c                                  | merged |
+| backend     | main (PR #2 merged)       | aab22b9                                  | merged |
+
+**Merged PRs:**
+- Backend PR #2: https://github.com/saadnaveed-amaskit/demo-backend/pull/2
+- Frontend PR #3: https://github.com/saadnaveed-amaskit/demo-frontend/pull/3
 
 ---
 

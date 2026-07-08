@@ -1,10 +1,15 @@
 ---
-status: Draft
+status: Stable
 artifact_type: api-contract
 slice_id: SLICE-02
 feature_id: 001-platform-baseline
 owner: backend
 consumers: [frontend]
+promoted_at: 2026-07-09
+backend_pr: https://github.com/saadnaveed-amaskit/demo-backend/pull/2
+frontend_pr: https://github.com/saadnaveed-amaskit/demo-frontend/pull/3
+backend_sha: aab22b9
+frontend_sha: 9a2fa8c
 ---
 
 # Contract — SLICE-02 Focus Set Management

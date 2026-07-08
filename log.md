@@ -2,6 +2,19 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-02: Focus Set management (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#3](https://github.com/saadnaveed-amaskit/demo-frontend/pull/3) merged to `main` — merge SHA `9a2fa8c`. Focus Builder screen: library panel (nuqs `?q=` search), form panel (create/edit), ConditionTree (AND/OR, ≤3 levels, shadcn Select), live preview (debounced resolve → count + 8 SKUs), CSV export, Zustand `useFocusBuilderStore`.
+- **backend:** PR [#2](https://github.com/saadnaveed-amaskit/demo-backend/pull/2) merged to `main` — merge SHA `aab22b9`. FocusSetsController (8 endpoints), FocusSetsService (in-memory Map, sequential IDs), condition.ts (recursive AND/OR matching, MAX_DEPTH=3), CatalogController/Service (attribute enumeration from 12-SKU seed).
+- **Requirements:** REQ-FOCUS-001…012 (all covered; REQ-FOCUS-010 duplicate-UI deferred to later slice).
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-02.md` — PASS (14 backend tests, 8 BDD scenarios; `npm run check` green on both repos).
+- **Contracts promoted:** `contracts/slice-02-focus-sets/contract.md` Draft → **Stable**.
+- **Open Q3 resolved:** resolution strategy = **live** (no snapshot/cache).
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; duplicate UI not exposed; Vite chunk >500 kB (pre-existing advisory).
+- **Next:** SLICE-03 (Product Grid) or SLICE-04 (Guardrails) — depends on SLICE-02 ✓.
+
 ## 2026-07-08 — SLICE-01: Platform shell & navigation (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

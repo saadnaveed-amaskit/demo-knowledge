@@ -40,7 +40,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 |---|---|---|---|---|---|
 | SLICE-00 | Repository scaffolding & quality gates | Complete | frontend, backend | — | P1 |
 | SLICE-01 | Platform shell & navigation | Complete | frontend | SLICE-00 | P1 |
-| SLICE-02 | Focus Set management | Approved | frontend, backend | SLICE-01 | P1 |
+| SLICE-02 | Focus Set management | Complete | frontend, backend | SLICE-01 | P1 |
 | SLICE-03 | Product Grid | Approved | frontend, backend | SLICE-02 | P1 |
 | SLICE-04 | Guardrails management | Approved | frontend, backend | SLICE-01 | P1 |
 | SLICE-05 | Promotions calendar | Approved | frontend, backend | SLICE-02 | P2 |
@@ -168,7 +168,9 @@ Expected PRs:
 
 ## Slice `SLICE-02` — `Focus Set management`
 
-Status: Approved
+Status: Complete
+
+Shipped: backend PR #2 (`aab22b9`) + frontend PR #3 (`9a2fa8c`) merged to `main` 2026-07-09. Validation: `validation/SLICE-02.md` (PASS). Contract promoted to Stable: `contracts/slice-02-focus-sets/contract.md`.
 
 Target repos:
 - frontend, backend
@@ -185,10 +187,9 @@ Acceptance scenarios covered:
 Contracts needed:
 - yes — `knowledge/contracts/slice-02-focus-sets/` (Focus Set CRUD, resolve-to-SKUs, attribute enumeration, export payload)
 
-Expected PRs:
-- frontend PR
-- backend PR
-- knowledge finalization commit after merge
+Merged PRs:
+- Backend PR #2: https://github.com/saadnaveed-amaskit/demo-backend/pull/2 (SHA: `aab22b9`)
+- Frontend PR #3: https://github.com/saadnaveed-amaskit/demo-frontend/pull/3 (SHA: `9a2fa8c`)
 
 ### Acceptance-Test-First Tasks
 - [ ] Add `focus-set-management.feature` covering create/preview/no-match, search/sort, export before UI
