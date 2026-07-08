@@ -39,7 +39,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 | Slice | Name | Status | Target repos | Depends on | Priority |
 |---|---|---|---|---|---|
 | SLICE-00 | Repository scaffolding & quality gates | Complete | frontend, backend | — | P1 |
-| SLICE-01 | Platform shell & navigation | Approved | frontend | SLICE-00 | P1 |
+| SLICE-01 | Platform shell & navigation | Complete | frontend | SLICE-00 | P1 |
 | SLICE-02 | Focus Set management | Approved | frontend, backend | SLICE-01 | P1 |
 | SLICE-03 | Product Grid | Approved | frontend, backend | SLICE-02 | P1 |
 | SLICE-04 | Guardrails management | Approved | frontend, backend | SLICE-01 | P1 |
@@ -119,7 +119,9 @@ Expected PRs:
 
 ## Slice `SLICE-01` — `Platform shell & navigation`
 
-Status: Approved
+Status: Complete
+
+Shipped: frontend PR #2 (`a9f4221`) merged to `main` 2026-07-08. Validation: `validation/SLICE-01.md` (PASS).
 
 Target repos:
 - frontend

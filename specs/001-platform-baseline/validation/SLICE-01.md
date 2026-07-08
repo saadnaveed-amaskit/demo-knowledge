@@ -91,7 +91,13 @@ None (patcher not invoked; 0/3).
 
 ## 12. Final Status
 
-**PASS.** Frontend `npm run check`, unit tests, and BDD (incl. SLICE-00 smoke regression) all green. Acceptance-test-first red→green demonstrated. Ready for PR review. Knowledge finalization (mark SLICE-01 Complete) deferred until the frontend PR merges.
+**PASS — SHIPPED.** Frontend `npm run check`, unit tests, and BDD (incl. SLICE-00 smoke regression) all green. Acceptance-test-first red→green demonstrated. Merged to `main` on 2026-07-08:
+
+| Repo | PR | Merge commit (`main`) | Feature commit |
+|---|---|---|---|
+| frontend | [#2](https://github.com/saadnaveed-amaskit/demo-frontend/pull/2) | `a9f4221` | `3ba29f0` |
+
+Backend not affected. SLICE-01 marked **Complete** in `tasks.md`. No contracts to promote (frontend-only). Knowledge finalized on branch `001-platform-baseline`.
 
 ## 13. Human Review Notes
 
