@@ -1,11 +1,14 @@
 ---
-status: Draft
+status: Stable
 artifact_type: api-contract
 slice_id: SLICE-04
 feature_id: 001-platform-baseline
 owner: backend
 consumers: [frontend]
 decision_versioning_audit: deferred — REQ-GUARD-007 [NEEDS CLARIFICATION]
+promoted_at: 2026-07-09
+backend_pr: https://github.com/saadnaveed-amaskit/demo-backend/pull/4
+frontend_pr: https://github.com/saadnaveed-amaskit/demo-frontend/pull/5
 ---
 
 # Contract — SLICE-04 Guardrails Management

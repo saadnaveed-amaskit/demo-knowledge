@@ -42,7 +42,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 | SLICE-01 | Platform shell & navigation | Complete | frontend | SLICE-00 | P1 |
 | SLICE-02 | Focus Set management | Complete | frontend, backend | SLICE-01 | P1 |
 | SLICE-03 | Product Grid | Complete | frontend, backend | SLICE-02 | P1 |
-| SLICE-04 | Guardrails management | In Review | frontend, backend | SLICE-01 | P1 |
+| SLICE-04 | Guardrails management | Complete | frontend, backend | SLICE-01 | P1 |
 | SLICE-05 | Promotions calendar | Approved | frontend, backend | SLICE-02 | P2 |
 | SLICE-06 | Discount Modeling | Approved | frontend, backend | SLICE-02 | P2 |
 | SLICE-07 | Price Scenario optimization | Approved | frontend, backend | SLICE-02, SLICE-04 | P2 |
@@ -283,9 +283,9 @@ Expected PRs:
 
 ## Slice `SLICE-04` — `Guardrails management`
 
-Status: In Review
+Status: Complete
 
-PRs open: backend PR [#4](https://github.com/saadnaveed-amaskit/demo-backend/pull/4) + frontend PR [#5](https://github.com/saadnaveed-amaskit/demo-frontend/pull/5). Validation: `validation/SLICE-04.md` (PASS).
+Shipped: backend PR [#4](https://github.com/saadnaveed-amaskit/demo-backend/pull/4) (`bda55a9`) + frontend PR [#5](https://github.com/saadnaveed-amaskit/demo-frontend/pull/5) (`59d77c2`) merged to `main` 2026-07-09. Validation: `validation/SLICE-04.md` (PASS). Contract promoted to Stable: `contracts/slice-04-guardrails/contract.md`.
 
 Target repos:
 - frontend, backend

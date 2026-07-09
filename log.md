@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-04: Guardrails management (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#5](https://github.com/saadnaveed-amaskit/demo-frontend/pull/5) merged to `main` — merge SHA `59d77c2`. GuardrailsScreen: management table (brand/division/rule/op/value/unit columns), inline value edit (RHF+Zod), active/overridable Switch toggles, add/delete, hard-constraint badge (amber) for active+non-overridable guardrails, enforcement preview panel (Pricing Team read-only view). shadcn Switch component added. Route `/guardrails` wired.
+- **backend:** PR [#4](https://github.com/saadnaveed-amaskit/demo-backend/pull/4) merged to `main` — merge SHA `bda55a9`. GuardrailsController (7 endpoints: list, create, update, toggleActive, toggleOverridable, remove, evaluate). GuardrailsService with 4-row in-memory seed. `POST /guardrails/evaluate` returns per-guardrail severity (hard/advisory) for live compliance checking.
+- **Requirements:** REQ-GUARD-001…007 covered. REQ-GUARD-005 enforcement in scenario creation deferred to SLICE-07. REQ-GUARD-007 audit/versioning deferred (`[NEEDS CLARIFICATION]`).
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-04.md` — PASS (42 backend tests, 12 BDD scenarios — 2 new guardrails + 10 existing; `npm run check` green on both repos).
+- **Contracts promoted:** `contracts/slice-04-guardrails/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; guardrail store resets on backend restart; REQ-GUARD-007 versioning/audit; full REQ-GUARD-005 enforcement in SLICE-07.
+- **Next:** SLICE-05 (Promotions calendar) or SLICE-07 (Price Scenario optimization, now unblocked by SLICE-04).
+
 ## 2026-07-09 — SLICE-03: Product Grid (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

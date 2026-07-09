@@ -1,7 +1,12 @@
 ---
 slice_id: SLICE-04
-status: Passed
+status: Shipped
 validated_at: 2026-07-09
+shipped_at: 2026-07-09
+frontend_merge_sha: 59d77c2e4629937f61598e8399e5770da23ee5a1
+backend_merge_sha: bda55a9dad94f318bc5bf7c61de8d5d76e9ebd2b
+frontend_pr: https://github.com/saadnaveed-amaskit/demo-frontend/pull/5
+backend_pr: https://github.com/saadnaveed-amaskit/demo-backend/pull/4
 ---
 
 # Validation Report — SLICE-04: Guardrails Management
