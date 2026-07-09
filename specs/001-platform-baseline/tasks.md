@@ -536,7 +536,7 @@ Expected PRs:
 
 ## Slice `SLICE-09` — `Approvals queue`
 
-Status: Approved
+Status: In Review
 
 Target repos:
 - frontend, backend

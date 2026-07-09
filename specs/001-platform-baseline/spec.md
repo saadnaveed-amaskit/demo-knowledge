@@ -210,12 +210,12 @@ EARS notation. Each requirement carries a stable ID and traces back to the `FR-*
 - **REQ-APPR-004** (FR-AP-08): The system shall move decided items to a separate table (name, submitter, brand, division, impact, risk, status) with a read-only "View" reopening the full output.
 - **REQ-APPR-005** (FR-AP-03): When a user views a cross-domain sub-action approval (no backing scenario), the system shall open a drawer with header context, risk explanation, guardrail-compliance list (pass/fail vs threshold), impact summary, and SKU-level breakdown.
 - **REQ-APPR-006** (FR-AP-09): When a user views a scenario submitted through the Price Scenario workflow, the system shall open the full scenario output in approval mode with inline Approve/Deny/Request Changes actions.
-- **REQ-APPR-007** (FR-AP-06a): When a user requests changes on a scenario, the system shall accept an optional comment, return the item to the submitter, and append the comment to change-request history.
+- **REQ-APPR-007** (FR-AP-06a): When a user requests changes on a scenario, the system shall require a mandatory comment, return the item to the submitter, and append the comment to change-request history. (Updated 2026-07-09 to resolve REQ-APPR-012/Open Q5 — was "optional".)
 - **REQ-APPR-008** (FR-AP-07): When a user approves a scenario tied to a cross-domain sub-action, the system shall also mark that sub-action approved and link back to the action tracker.
 - **REQ-APPR-009** (FR-AP-04): When a user views a discount model, the system shall open a drawer with header context, a risk banner (hard/advisory counts), impact summary, constraint warnings, and competitive flags, without an itemized guardrail-compliance list or SKU-level price breakdown.
 - **REQ-APPR-010** (FR-AP-06b): When a user returns a discount model for changes, the system shall require a mandatory comment, return the item to the submitter, and append the comment to change-request history.
 - **REQ-APPR-011** (business rule): The system shall derive discount risk (High if any hard violation; Medium if any violation; else Low) and fallback scenario risk (High if inventory-risk-reduction > $10M; Medium if > $5M; else Low).
-- **REQ-APPR-012** (§15.5 gap): The system shall apply one consistent reason-required policy across deny / request-changes / override actions. `[NEEDS CLARIFICATION: which policy]`
+- **REQ-APPR-012** (§15.5 gap): The system shall apply one consistent reason-required policy across deny / request-changes / override actions: a mandatory reason/comment is required in all three cases. (Resolved 2026-07-09 — see Open Question 5.)
 
 ### Agents — `REQ-AGENT-*`
 
@@ -576,7 +576,7 @@ Backend-owned contracts (detailed API design deferred to plan/contract artifacts
 2. `[NEEDS CLARIFICATION]` Canonical Promotion/Discount entity reconciling the three fragmented shapes (§15.1). Yes, reconcile
 3. `[NEEDS CLARIFICATION]` Focus Set resolution: live evaluation vs. persisted+labeled snapshot; minimum-match enforcement (§2/§15.2). Live evaluation
 4. `[NEEDS CLARIFICATION]` Where hard guardrail violations must block a transition versus warn, screen by screen (§15.4).
-5. `[NEEDS CLARIFICATION]` One consistent reason-required policy across deny/request-changes/override (§15.5).
+5. ~~`[NEEDS CLARIFICATION]` One consistent reason-required policy across deny/request-changes/override (§15.5).~~ Resolved during SLICE-09 implementation (human decision, 2026-07-09): mandatory reason/comment required for **all three** action types — deny, request-changes (scenario), and return-for-changes (discount). See REQ-APPR-007 update below.
 6. `[NEEDS CLARIFICATION]` Is brand/division access control a real, platform-wide requirement (§14/§15.6)? Yes, it's a real requirement.
 7. `[NEEDS CLARIFICATION]` Is the "Ask anything" surface in or out of scope (§15.7)? Keep it as a stub for now.
 8. `[NEEDS CLARIFICATION]` Canonical version for Agents and Autonomy vs. the more-complete V2 fork; kill-switch freeze semantics (§10/§11).
