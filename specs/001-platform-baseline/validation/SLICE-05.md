@@ -1,7 +1,12 @@
 ---
 slice_id: SLICE-05
-status: In Review
+status: Shipped
 validated_at: 2026-07-09
+finalized_at: 2026-07-09
+frontend_pr: https://github.com/saadnaveed-amaskit/demo-frontend/pull/7
+frontend_merge_sha: 30ebbccc0ec41dda9f9d380f6a615f532f714635
+backend_pr: https://github.com/saadnaveed-amaskit/demo-backend/pull/5
+backend_merge_sha: 1ec578722d9fbd4eefd5d81d25f7b8258c069f0c
 ---
 
 # Validation Report — SLICE-05: Promotions Calendar
@@ -123,4 +128,12 @@ None required.
 
 ## Remaining Blockers
 
-None. Ready for PR review.
+None.
+
+## Finalization
+
+- frontend PR [#7](https://github.com/saadnaveed-amaskit/demo-frontend/pull/7) merged 2026-07-09 — merge SHA `30ebbccc0ec41dda9f9d380f6a615f532f714635`
+- backend PR [#5](https://github.com/saadnaveed-amaskit/demo-backend/pull/5) merged 2026-07-09 — merge SHA `1ec578722d9fbd4eefd5d81d25f7b8258c069f0c`
+- Contract promoted to Stable
+- SLICE-05 marked Complete in `tasks.md`
+- Entry added to `knowledge/log.md`

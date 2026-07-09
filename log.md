@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-05: Promotions calendar (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#7](https://github.com/saadnaveed-amaskit/demo-frontend/pull/7) merged to `main` — merge SHA `30ebbccc0ec41dda9f9d380f6a615f532f714635`. PromotionsScreen at `/promos`: list view + mini calendar toggle; status filter tabs (All/Active/Scheduled/Expired) with live counts; PromoForm (RHF+Zod, end-after-start validation); PromoDetail drawer with status badge, discount summary, "View Products" button; per-SKU promo price table (≤20 SKUs, `data-testid="promo-product-row"`, `data-testid="promo-price"`). date-fns calendar grid with colored promotion bars.
+- **backend:** PR [#5](https://github.com/saadnaveed-amaskit/demo-backend/pull/5) merged to `main` — merge SHA `1ec578722d9fbd4eefd5d81d25f7b8258c069f0c`. PromotionsController (5 endpoints: list, create, update, delete 204, getProducts). PromotionsService with in-memory store (no seed — BDD-driven). Status (`active`/`scheduled`/`expired`) derived at query time from dates; `BadRequestException` when `endDate ≤ startDate`. `GET /:id/products` resolves Focus Set link, filters catalog SKUs (≤20), computes promo price via percentage or flat discount.
+- **Requirements:** REQ-PROMO-001…008 covered. Open Q2 resolved: canonical entity is `PromotionEntity` (pricing domain, distinct from marketing `PromoEntity`).
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-05.md` — PASS (59 backend tests, 15/15 BDD scenarios — 3 new promotions + 12 existing; `npm run check` + build green on both repos). 0 patch attempts.
+- **Contracts promoted:** `contracts/slice-05-promotions/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; promotion store resets on backend restart (in-memory); promo price does not account for stacking/priority rules (out of scope for this slice).
+- **Next:** SLICE-06 (Discount Modeling) or SLICE-07 (Price Scenario optimization) — both approved.
+
 ## 2026-07-09 — SLICE-04: Guardrails management (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

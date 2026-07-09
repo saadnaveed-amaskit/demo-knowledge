@@ -1,10 +1,13 @@
 ---
-status: Draft
+status: Stable
 artifact_type: api-contract
 slice_id: SLICE-05
 feature_id: 001-platform-baseline
 owner: backend
 consumers: [frontend]
+promoted_at: 2026-07-09
+backend_merge_sha: 1ec578722d9fbd4eefd5d81d25f7b8258c069f0c
+frontend_merge_sha: 30ebbccc0ec41dda9f9d380f6a615f532f714635
 open_q2_resolution: >
   Canonical entity is PromotionEntity (Tier-1, pricing domain).
   Distinct from PromoEntity (marketing pacing events, already in taxonomy).
