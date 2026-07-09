@@ -4,9 +4,9 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| knowledge | 001-platform-baseline | 0c45b62ab4a00253b6faf1129cde58d84145eb7d |
-| frontend | main | d234cdbd42bc66353e1e0836a4c32152bbfaa828 |
-| backend | main | a6df30032fabb22b0f07263469a0c787b0efd12b |
+| knowledge | 001-platform-baseline | a4e1d373afcda411ba6adcf8868e1aed258aa4b5 |
+| frontend | main | 05d5371ef41b813ad369cd598d8ca982a40afa55 |
+| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
 
 ## Frontend Dependencies
 
@@ -28,7 +28,10 @@ See the full table in [Backend Structure](backend-structure.md#dependencies). Ke
 | frontend: screens/price-scenarios/scenarios-api.ts | backend `/price-scenarios/*` | `fetch` calls to list/create/run/submit/delete/deep-dive endpoints |
 | frontend: screens/discount-modeling/discount-modeling-api.ts | backend `/discount-models/*` | `fetch` calls to list/create/run/submit/delete endpoints |
 | frontend: screens/discount-modeling/focus-sets-ref-api.ts | backend `/focus-sets` | `fetch` calls used to populate the focus-group selector in the discount-modeling form |
+| frontend: screens/agents/agents-api.ts | backend `/agents/*` | `fetch` calls to `roster`, `catalog`, `monitors/:id/pause`, `monitors/:id/resume`, `hire`, `task-agents/:id/retire` |
 | frontend: all screens | backend base URL | `import.meta.env.VITE_API_URL ?? "http://localhost:3000"`, per-screen fetch-wrapper module |
+
+Note: `AgentsService` (SLICE-10) has no constructor dependencies on other backend services — it seeds its own monitors/operators/task-agents in-memory, unlike `PriceScenariosService`/`ApprovalsService`.
 
 ## Frontend ↔ Backend Boundary
 
@@ -36,9 +39,9 @@ The frontend has no shared HTTP client or React Query layer — each screen fold
 
 ## Contract Dependencies
 
-- **Canonical contract:** `backend/contracts/api-contract.md` (47 endpoints, 57 schemas) — see [Contract Summary](../api/contract-summary.md).
-- **`backend/contracts/api-contract.yaml`** (OpenAPI 3.0.3 structured version) existed at one point but was deleted from `main` in backend commit `bb1a951` — it is not present in the current tree.
-- **Per-slice contract references** under `knowledge/contracts/<slice-id>/contract.md` exist for SLICE-02 through SLICE-09 (8 folders; SLICE-09's is `Draft`, the rest `Stable`). These are design-time supporting references consulted during implementation, not the canonical contract.
+- **Canonical contract:** `backend/contracts/api-contract.md` (53 endpoints, 64 schemas) — see [Contract Summary](../api/contract-summary.md).
+- **`backend/contracts/api-contract.yaml`** (OpenAPI 3.0.3 structured version) existed at one point but was deleted from `main` in backend commit `bb1a951` — it is not present in the current tree. SLICE-10's Agents endpoints/schemas were hand-authored directly into the Markdown for this reason.
+- **Per-slice contract references** under `knowledge/contracts/<slice-id>/contract.md` exist for SLICE-02 through SLICE-10 (9 folders, all `Stable`).
 
 ## Known Gaps
 

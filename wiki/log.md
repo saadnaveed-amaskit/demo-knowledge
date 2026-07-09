@@ -2,6 +2,42 @@
 
 Chronological record of `/update-code-wiki` runs. Newest first.
 
+### 2026-07-09 — finalize-knowledge-after-merge-SLICE-10
+
+| Field | Value |
+|---|---|
+| mode | targeted finalization (`/finalize-knowledge-after-merge SLICE-10`) |
+| knowledge commit | a4e1d373afcda411ba6adcf8868e1aed258aa4b5 |
+| frontend commit | 05d5371ef41b813ad369cd598d8ca982a40afa55 |
+| backend commit | a18bdff033c9dac4a90c365c547446057da3ae9b |
+| API contract changed | Yes — `backend/contracts/api-contract.md` gained 6 `/agents/*` endpoints and 7 schemas (in the merged backend PR); not edited by this finalization run itself |
+| validation report | knowledge/specs/001-platform-baseline/validation/SLICE-10.md (front matter updated `Draft` → `Shipped`) |
+| PR links | frontend [#12](https://github.com/saadnaveed-amaskit/demo-frontend/pull/12); backend [#11](https://github.com/saadnaveed-amaskit/demo-backend/pull/11) |
+
+Updated wiki files:
+
+- knowledge/wiki/features/SLICE-10.md (created — status `Complete`)
+- knowledge/wiki/index.md (updated — SLICE-10 row → `Complete`; Known Gaps adjusted)
+- knowledge/wiki/architecture/overview.md (updated — slice count, Agents module, contract endpoint/schema counts, Known Gaps)
+- knowledge/wiki/codebase/frontend-structure.md (updated — `/agents` route, `AgentsScreen.tsx`, new BDD test row, Known Gaps)
+- knowledge/wiki/codebase/backend-structure.md (updated — `src/agents/` module, 6 new routes, new service/test rows)
+- knowledge/wiki/codebase/dependency-map.md (updated — new frontend↔backend dependency row, contract endpoint/schema counts, per-slice contract folder count)
+- knowledge/wiki/api/contract-summary.md (updated — 6 new endpoints, 7 new schemas, SLICE-10 row in Related Features/Slices, Known Gaps)
+
+Other knowledge files updated (non-wiki):
+
+- knowledge/specs/001-platform-baseline/tasks.md (SLICE-10 `Status:` line and Slice Index table row → `Complete`)
+- knowledge/specs/001-platform-baseline/validation/SLICE-10.md (front matter `status: Draft` → `Shipped`; added Finalization/Merged PRs sections)
+- knowledge/contracts/slice-10-agents/contract.md (front matter `status: Draft` → `Stable`)
+
+Templates: all 8 required templates under `knowledge/wiki/_templates/` already existed and were reused as-is; none created or overwritten.
+
+Known gaps:
+
+- `backend/contracts/api-contract.yaml` remains deleted from `main` (commit `bb1a951`); only `api-contract.md` exists. SLICE-10's Agents entries were hand-authored directly into the Markdown for this reason.
+- `api-contract.md`'s own embedded Source table still shows a pre-merge placeholder ("pending commit on this branch") rather than the final merge SHA `a18bdff` — not corrected here per the "do not edit api-contract.md" constraint on this finalization command.
+- SLICE-10's Operator trust data remains a deterministic placeholder pending SLICE-11 (Pricing Autonomy).
+
 ### 2026-07-09 — finalize-knowledge-after-merge-SLICE-09
 
 | Field | Value |

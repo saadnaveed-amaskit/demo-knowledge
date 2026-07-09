@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| frontend | main | d234cdbd42bc66353e1e0836a4c32152bbfaa828 |
+| frontend | main | 05d5371ef41b813ad369cd598d8ca982a40afa55 |
 
 ## Package Scripts
 
@@ -79,7 +79,7 @@
 | src/components/ | Shared/reusable UI components | Contains `ui/` subfolder |
 | src/components/ui/ | Low-level reusable UI primitives | `button.tsx`, `input.tsx`, `select.tsx`, `switch.tsx` — no `Sheet`/`Dialog` component exists yet |
 | src/lib/ | Shared utility helpers | `utils.ts` (className merge helper) |
-| src/screens/ | One folder per feature screen | `approvals`, `discount-modeling`, `focus-builder`, `guardrails`, `price-scenarios`, `product-grid`, `promotions`, plus `ScreenPlaceholder.tsx` |
+| src/screens/ | One folder per feature screen | `agents`, `approvals`, `discount-modeling`, `focus-builder`, `guardrails`, `price-scenarios`, `product-grid`, `promotions`, plus `ScreenPlaceholder.tsx` |
 | src/state.ts | Global Zustand store | App-wide UI state (brand/channel) |
 
 ## Routes
@@ -87,7 +87,7 @@
 | Route | File | Notes |
 |---|---|---|
 | / | Redirect | `<Navigate to="/focus" replace />` |
-| /agents | src/screens/ScreenPlaceholder.tsx | Placeholder — SLICE-10 (Agent roster) not yet implemented |
+| /agents | src/screens/agents/AgentsScreen.tsx | SLICE-10 |
 | /approvals | src/screens/approvals/ApprovalsScreen.tsx | SLICE-09 |
 | /autonomy | src/screens/ScreenPlaceholder.tsx | Placeholder — SLICE-11 (Pricing Autonomy) not yet implemented |
 | /config | src/screens/ScreenPlaceholder.tsx | Placeholder — SLICE-14 (Configuration) not yet implemented |
@@ -106,6 +106,7 @@ All routes render as children of the layout route `path: "/"`, whose element is 
 
 | Component/File | Path | Notes |
 |---|---|---|
+| AgentsScreen.tsx | src/screens/agents/AgentsScreen.tsx | Agent roster: KPI strip, Monitors/Operators/Task Agents sections, pause/resume, hire-from-catalog, retire |
 | ApprovalsScreen.tsx | src/screens/approvals/ApprovalsScreen.tsx | Approvals queue: tabs, pending rows, deny/request-changes/approve actions, decided table, scenario/discount review views |
 | ConditionTree.tsx | src/screens/focus-builder/ConditionTree.tsx | Recursive filter-rule tree editor used inside Focus Builder |
 | DeepDiveSection.tsx | src/screens/price-scenarios/DeepDiveSection.tsx | AG Grid-based price-adjustments explorer with row explain/export (SLICE-08) |
@@ -132,6 +133,7 @@ No other `state.ts` files exist elsewhere under `src/`; other screens use local 
 
 | Test file | Type | Notes |
 |---|---|---|
+| features/agent-roster.feature + tests/bdd/steps/agent-roster.steps.ts | BDD | Agent Roster (SLICE-10) |
 | features/app-boots.feature + tests/bdd/steps/app-boots.steps.ts | BDD | Application boots |
 | features/app-shell-navigation.feature + tests/bdd/steps/app-shell-navigation.steps.ts | BDD | Application shell and navigation |
 | features/approvals-queue.feature + tests/bdd/steps/approvals-queue.steps.ts | BDD | Approvals Queue (SLICE-09) |
@@ -148,4 +150,4 @@ No other `state.ts` files exist elsewhere under `src/`; other screens use local 
 ## Known Gaps
 
 - No `*.test.tsx`/`*.spec.tsx` unit test exists per screen — `src/App.test.tsx` is the only Vitest file; per-screen coverage relies on the BDD suite.
-- `/agents`, `/autonomy`, `/config`, `/like-items`, and `/measurement` are `ScreenPlaceholder` routes pending SLICE-10 through SLICE-14.
+- `/autonomy`, `/config`, `/like-items`, and `/measurement` are `ScreenPlaceholder` routes pending SLICE-11 through SLICE-14.

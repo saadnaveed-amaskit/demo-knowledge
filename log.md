@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-10: Agent Roster (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#12](https://github.com/saadnaveed-amaskit/demo-frontend/pull/12) merged to `main` — merge SHA `05d5371ef41b813ad369cd598d8ca982a40afa55`. `AgentsScreen` at `/agents`: 5-tile KPI strip (agents on team, signals today, acting autonomously, evidence-backed X/Y, task agents running) plus three card sections — Monitors (pause/resume toggle, signals-today, last-activity), Operators (trust level, evidence status, track record, click-through to `/autonomy`), Task Agents (spawned-by, retirement condition, Open deep link, Retire action). "Hire Agent" flow picks kind + subtype from the backend catalog and adds it to the roster.
+- **backend:** PR [#11](https://github.com/saadnaveed-amaskit/demo-backend/pull/11) merged to `main` — merge SHA `a18bdff033c9dac4a90c365c547446057da3ae9b`. `AgentsController`/`AgentsService` (6 endpoints: roster, catalog, monitor pause, monitor resume, hire, task-agent retire). Two new Tier-1 entities — `MonitorEntity`, `TaskAgentEntity` — seeded in-memory (3 monitors, 2 task agents); `OperatorView` is Tier-2/derived per plan.md, seeded with 2 operators and always assigned placeholder trust data (`trustLevel: "Low"`, `evidenceStatus: "unproven"`) when hired, since no Autonomy system exists yet to supply real trust-ladder data. `backend/contracts/api-contract.md` updated with the 6 new endpoints and 7 new schemas, hand-authored directly since `api-contract.yaml` no longer exists on `main`.
+- **Requirements:** REQ-AGENT-001…007 covered. REQ-AGENT-007 (one canonical Agents implementation vs. the Pricing Platform V2 Agentic fork, spec Open Q8) resolved by definition — the V2 fork isn't part of this workspace, so there's no competing implementation to reconcile against.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-10.md` — Shipped (backend 121/121 tests, `npm run check` green on both repos; frontend 30/30 BDD scenarios — 2 new + no regressions — `npx vitest run` and `npm run check` green). 0 patch attempts.
+- **Contracts promoted:** `contracts/slice-10-agents/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; in-memory store resets on restart; Operator trust data remains a deterministic placeholder pending SLICE-11 (Pricing Autonomy); task agents are seeded, not spawned by live platform events (no creation endpoint yet); `backend/contracts/api-contract.yaml` remains absent from `main`.
+- **Next:** SLICE-11 (Pricing Autonomy, depends on SLICE-10 ✓) is the next `Approved` slice by dependency order; SLICE-12…14 remain `Approved` but depend on other slices or open spec questions.
+
 ## 2026-07-09 — SLICE-09: Approvals Queue (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

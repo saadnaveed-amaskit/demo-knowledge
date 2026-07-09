@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| backend | main | a6df30032fabb22b0f07263469a0c787b0efd12b |
+| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
 
 ## Package Scripts
 
@@ -49,6 +49,7 @@ Jest config is embedded in `package.json` (`rootDir: "src"`, `testRegex: ".*\\.s
 
 | Path | Purpose | Notes |
 |---|---|---|
+| src/agents/ | Agent roster: monitors, derived operators, task agents; hire/pause/resume/retire | SLICE-10; no dependency on other services |
 | src/catalog/ | Exposes catalog-derived filterable attributes | `catalog-data.ts` static SKU dataset + service/controller; no dedicated spec file |
 | src/discount-modeling/ | CRUD + run/submit lifecycle for discount models | SLICE-06 |
 | src/focus-sets/ | CRUD for Focus Sets (named SKU filters) | SLICE-02; condition-tree evaluation in `condition.ts` |
@@ -66,6 +67,12 @@ Root-level `src/` files: `app.module.ts` (wires all controllers/providers), `mai
 
 | Path | Purpose | Notes |
 |---|---|---|
+| GET /agents/roster | Full roster (KPIs, monitors, operators, task agents) | `agents.controller.ts`, SLICE-10 |
+| GET /agents/catalog | Provisionable monitor/operator types | SLICE-10 |
+| POST /agents/monitors/:id/pause | Pause a monitor | HttpCode 200, SLICE-10 |
+| POST /agents/monitors/:id/resume | Resume a monitor | HttpCode 200, SLICE-10 |
+| POST /agents/hire | Hire a monitor or operator from the catalog | SLICE-10 |
+| POST /agents/task-agents/:id/retire | Retire a task agent | HttpCode 200, SLICE-10 |
 | GET /health | Liveness check | `health.controller.ts` |
 | GET /catalog/attributes | List filterable catalog attributes and observed values | `catalog.controller.ts` |
 | GET /focus-sets | List all focus sets | `focus-sets.controller.ts` |
@@ -120,6 +127,7 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 
 | Path | Purpose | Notes |
 |---|---|---|
+| src/agents/agents.service.ts | In-memory array CRUD-lite (seeded monitors/operators/task agents); hire, pause/resume, retire | No constructor dependencies on other services |
 | src/catalog/catalog.service.ts | Derives distinct filterable attribute/value options from static `CATALOG_SKUS` data | Read-only, no store |
 | src/focus-sets/focus-sets.service.ts | In-memory `Map`-backed CRUD + duplicate/resolve for Focus Sets | Evaluates condition trees against the catalog |
 | src/product-grid/product-grid.service.ts | Builds grid/product/SKU views for a Focus Set; tracks per-focus-set SKU exclusions | `Map<string, Set<string>>` |
@@ -134,6 +142,7 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 
 | Test file | Type | Notes |
 |---|---|---|
+| src/agents/agents.controller.spec.ts | Controller + service | Roster/catalog reads, pause/resume/hire/retire delegation; second `describe` block tests `BadRequestException` (invalid hire subtype) and `NotFoundException` (unknown monitor id) directly against `AgentsService` |
 | src/health/health.controller.spec.ts | Controller | Returns `{status: "ok"}` |
 | src/focus-sets/focus-sets.controller.spec.ts | Controller | Catalog attributes, resolve preview, 400 on missing name, full CRUD+duplicate+delete lifecycle |
 | src/focus-sets/focus-sets.service.spec.ts | Service | Filter resolution, create with auto-incremented id, edit-in-place, duplicate, live productCount, delete |

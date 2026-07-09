@@ -1,11 +1,28 @@
 ---
-status: Draft
+status: Shipped
 artifact_type: validation-report
 slice_id: SLICE-10
 feature_id: 001-platform-baseline
 ---
 
 # Validation Report — SLICE-10: Agent Roster
+
+## Finalization (post-merge)
+
+| Repo | Branch | Impl commit | Merge SHA (main) | Status |
+|---|---|---|---|---|
+| knowledge | 001-platform-baseline | a4e1d37 | — | Clean |
+| backend | agent/slice-10-agent-roster | f77dcd0 | a18bdff (PR #11) | Merged |
+| frontend | agent/slice-10-agent-roster | b567ee6 | 05d5371 (PR #12) | Merged |
+
+## Merged PRs
+
+| Repo | PR | Merged at | Merge SHA |
+|---|---|---|---|
+| frontend | [#12](https://github.com/saadnaveed-amaskit/demo-frontend/pull/12) | 2026-07-09T13:46:36Z | 05d5371ef41b813ad369cd598d8ca982a40afa55 |
+| backend | [#11](https://github.com/saadnaveed-amaskit/demo-backend/pull/11) | 2026-07-09T13:46:23Z | a18bdff033c9dac4a90c365c547446057da3ae9b |
+
+`backend/contracts/api-contract.md` was updated in this slice's line of work (6 new `/agents/*` endpoints, 7 new schemas), included in the merged backend PR.
 
 ## Context
 

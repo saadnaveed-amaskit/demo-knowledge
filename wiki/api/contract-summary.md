@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| backend | main | a6df30032fabb22b0f07263469a0c787b0efd12b |
+| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
 
 ## Canonical Contract
 
@@ -13,12 +13,18 @@
 | Markdown contract | backend/contracts/api-contract.md |
 | YAML source, if present | **Not present.** `backend/contracts/api-contract.yaml` existed on this branch but was deleted from `main` in commit `bb1a951` ("deleted redundant file") before the SLICE-09 merge. |
 
-Note: `api-contract.md`'s own embedded "Source" table currently records `Backend branch: agent/slice-09-approvals-queue` / commit `f1929644a50336625a1fef46a88a49508f095c6a` — the branch/commit as of when the file was generated, prior to merge. It has not been regenerated against the current `main` HEAD (`a6df300`); see Known Gaps.
+Note: `api-contract.md`'s own embedded "Source" table currently records `Backend branch: agent/slice-10-agent-roster`, commit "pending commit on this branch" — a placeholder left over from before that branch's PR merged. It has not been regenerated against the current `main` HEAD (`a18bdff`); see Known Gaps.
 
 ## Endpoint Groups
 
 | Method | Path | Summary | Source |
 |---|---|---|---|
+| GET | `/agents/catalog` | List provisionable monitor/operator types | agents |
+| POST | `/agents/hire` | Hire a new monitor or operator from the catalog | agents |
+| POST | `/agents/monitors/{id}/pause` | Pause a monitor | agents |
+| POST | `/agents/monitors/{id}/resume` | Resume a monitor | agents |
+| GET | `/agents/roster` | Get the full agent roster (KPIs, monitors, operators, task agents) | agents |
+| POST | `/agents/task-agents/{id}/retire` | Retire a task agent | agents |
 | GET | `/approvals/decided` | List price scenarios and discount models that have been decided | approvals |
 | POST | `/approvals/discounts/{id}/decision` | Approve, deny, or request changes on a pending discount model | approvals |
 | GET | `/approvals/discounts/{id}/review` | Get the discount model's risk banner and impact for approval-mode review | approvals |
@@ -67,12 +73,15 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | PATCH | `/promotions/{id}` | Partially update a promotion | promotions |
 | GET | `/promotions/{id}/products` | Get the (discounted) product rows for a promotion | promotions |
 
-47 endpoints total, across 9 tags.
+53 endpoints total, across 10 tags.
 
 ## Schemas / Request-Response Objects
 
 | Name | Purpose | Source |
 |---|---|---|
+| AgentCatalogView | Fixed, hardcoded provisionable catalog (monitor/operator types) | agents |
+| AgentKpis | Derived on every read from the current monitors/operators/taskAgents arrays — not stored | agents |
+| AgentRosterView | [NOT SPECIFIED] | agents |
 | ApprovalItemView | Tier-2, computed on read from a ScenarioEntity or DiscountModelEntity — not a persisted Tier-1 entity | approvals |
 | ApprovalsDecidedView | [NOT SPECIFIED] | approvals |
 | ApprovalsQueueView | [NOT SPECIFIED] | approvals |
@@ -105,11 +114,14 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | GuardrailEntity | [NOT SPECIFIED] | guardrails |
 | GuardrailEvaluationResult | [NOT SPECIFIED] | guardrails |
 | HealthStatus | [NOT SPECIFIED] | health |
+| HireDto | Plain TS interface — zero runtime enum validation on `kind`; only `subtype` is checked | agents |
 | MarketingTile | [NOT SPECIFIED] | price-scenarios (deep-dive) |
 | MarketingTileProduct | [NOT SPECIFIED] | price-scenarios (deep-dive) |
+| MonitorEntity | Tier-1 canonical standing monitor; in-memory, seeded + hired | agents |
 | NivoBarDatapoint | [NOT SPECIFIED] | discount-models |
 | NivoLineDatapoint | [NOT SPECIFIED] | discount-models |
 | NivoLineDataset | [NOT SPECIFIED] | discount-models |
+| OperatorView | Tier-2 derived view — NOT a persisted Tier-1 entity; hired operators always get placeholder trust data | agents |
 | ProductGridView | [NOT SPECIFIED] | product-grid |
 | ProductRow | [NOT SPECIFIED] | product-grid |
 | PromoProductRow | [NOT SPECIFIED] | promotions |
@@ -128,10 +140,11 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | SkuRecommendationRow | [NOT SPECIFIED] | price-scenarios (deep-dive) |
 | SkuRow | [NOT SPECIFIED] | product-grid |
 | SkuView | [NOT SPECIFIED] | focus-sets |
+| TaskAgentEntity | Tier-1 canonical task agent; seeded only in v1, no creation endpoint | agents |
 | UpdateGuardrailDto | All fields optional; server only assigns fields that are not undefined (partial update) | guardrails |
 | UpdatePromotionDto | All fields optional; partial update | promotions |
 
-57 schemas total. `[NOT SPECIFIED]` above means the YAML's `description:` field for that schema was empty at generation time — not an omission introduced by this summary. "Source" column groups schemas by the tag/module that owns them, inferred from usage, not a literal YAML field.
+64 schemas total. `[NOT SPECIFIED]` above means the YAML's `description:` field for that schema was empty at generation time (for pre-SLICE-10 schemas) or intentionally omitted for hand-authored SLICE-10 entries with no natural one-line purpose beyond their field table — not an omission introduced by this summary. "Source" column groups schemas by the tag/module that owns them, inferred from usage, not a literal YAML field.
 
 ## Related Features / Slices
 
@@ -145,10 +158,11 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | SLICE-07 (Price Scenario optimization) | price-scenarios |
 | SLICE-08 (Deep Dive) | price-scenarios (`/price-scenarios/{id}/deep-dive` + deep-dive schemas) |
 | SLICE-09 (Approvals queue) | approvals |
+| SLICE-10 (Agent roster) | agents |
 | catalog, health | [UNKNOWN] — no dedicated slice found in `tasks.md`; catalog/health appear to be foundational scaffolding rather than a numbered slice |
 
 ## Known Gaps
 
-- `api-contract.md`'s embedded Source table still records the pre-merge feature branch/commit (`agent/slice-09-approvals-queue` @ `f192964`), not the current `main` HEAD (`a6df300`) — it has not been regenerated since the SLICE-09 merge.
-- `backend/contracts/api-contract.yaml` no longer exists on `main` (deleted in commit `bb1a951`); only the Markdown contract is currently present.
-- 51 of 57 schemas have no `description:` in the source YAML (`[NOT SPECIFIED]`) — this reflects the YAML's own content, not a gap introduced here.
+- `api-contract.md`'s embedded Source table still records the pre-merge feature branch/commit (`agent/slice-10-agent-roster`, commit placeholder "pending commit on this branch"), not the current `main` HEAD (`a18bdff`) — it has not been regenerated since the SLICE-10 merge, and cannot be corrected by `/finalize-knowledge-after-merge` per its "do not edit api-contract.md" constraint.
+- `backend/contracts/api-contract.yaml` no longer exists on `main` (deleted in commit `bb1a951`); only the Markdown contract is currently present. SLICE-10's Agents endpoints/schemas were hand-authored directly into the Markdown for this reason.
+- Most pre-SLICE-10 schemas have no `description:` in the original source YAML (`[NOT SPECIFIED]`) — this reflects the YAML's own content, not a gap introduced here.
