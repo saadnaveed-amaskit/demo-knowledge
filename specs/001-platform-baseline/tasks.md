@@ -41,7 +41,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 | SLICE-00 | Repository scaffolding & quality gates | Complete | frontend, backend | — | P1 |
 | SLICE-01 | Platform shell & navigation | Complete | frontend | SLICE-00 | P1 |
 | SLICE-02 | Focus Set management | Complete | frontend, backend | SLICE-01 | P1 |
-| SLICE-03 | Product Grid | In Review | frontend, backend | SLICE-02 | P1 |
+| SLICE-03 | Product Grid | Complete | frontend, backend | SLICE-02 | P1 |
 | SLICE-04 | Guardrails management | Approved | frontend, backend | SLICE-01 | P1 |
 | SLICE-05 | Promotions calendar | Approved | frontend, backend | SLICE-02 | P2 |
 | SLICE-06 | Discount Modeling | Approved | frontend, backend | SLICE-02 | P2 |
@@ -230,9 +230,9 @@ Merged PRs:
 
 ## Slice `SLICE-03` — `Product Grid`
 
-Status: In Review
+Status: Complete
 
-PRs open: backend PR #3 (https://github.com/saadnaveed-amaskit/demo-backend/pull/3) + frontend PR #4 (https://github.com/saadnaveed-amaskit/demo-frontend/pull/4). Validation: `validation/SLICE-03.md` (PASS).
+Shipped: backend PR [#3](https://github.com/saadnaveed-amaskit/demo-backend/pull/3) (`67df4a3`) + frontend PR [#4](https://github.com/saadnaveed-amaskit/demo-frontend/pull/4) (`36d559c`) merged to `main` 2026-07-09. Validation: `validation/SLICE-03.md` (PASS). Contract promoted to Stable: `contracts/slice-03-product-grid/contract.md`.
 
 Target repos:
 - frontend, backend

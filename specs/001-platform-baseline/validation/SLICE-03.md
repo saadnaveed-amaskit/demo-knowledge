@@ -1,7 +1,12 @@
 ---
 slice_id: SLICE-03
-status: Passed
+status: Shipped
 validated_at: 2026-07-09
+shipped_at: 2026-07-09
+frontend_merge_sha: 36d559c5a7702aae1c406f0e6e282f0cd2f6762f
+backend_merge_sha: 67df4a31aa1ab1c3583f8555d8b58af4b1cbbb0e
+frontend_pr: https://github.com/saadnaveed-amaskit/demo-frontend/pull/4
+backend_pr: https://github.com/saadnaveed-amaskit/demo-backend/pull/3
 ---
 
 # Validation Report — SLICE-03: Product Grid

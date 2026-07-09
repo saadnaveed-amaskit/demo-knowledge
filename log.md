@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-03: Product Grid (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#4](https://github.com/saadnaveed-amaskit/demo-frontend/pull/4) merged to `main` — merge SHA `36d559c`. ProductGrid screen (AG Grid community v33): product-level and SKU-level view toggle, soft-delete to Deleted Items pane, Restore / Restore All, `data-testid="active-sku-count"` live counter, Open-in-Grid drill button from Focus Builder cards. Routes `/product-grid?focus=<id>` wired.
+- **backend:** PR [#3](https://github.com/saadnaveed-amaskit/demo-backend/pull/3) merged to `main` — merge SHA `67df4a3`. ProductGridController (4 endpoints: getGrid, excludeSku, restoreSku, restoreAll). ProductGridService with in-memory exclusions Map per focusSetId and product-rollup grouping by productId. CatalogSku extended with productId/productName/msrp; 3 new multi-SKU products added (15 total SKUs across 13 products).
+- **Requirements:** REQ-PG-01…08 covered.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-03.md` — PASS (25 backend tests, 10 BDD scenarios — 2 new product-grid + 8 existing; `npm run check` green on both repos).
+- **Contracts promoted:** `contracts/slice-03-product-grid/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; exclusions reset on backend restart (in-memory); AG Grid bundle contribution (advisory).
+- **Next:** SLICE-04 (Guardrails management) or SLICE-05 (Promotions calendar) — both approved, SLICE-04 depends on SLICE-01 ✓.
+
 ## 2026-07-09 — SLICE-02: Focus Set management (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`
