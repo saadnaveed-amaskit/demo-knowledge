@@ -1,7 +1,8 @@
 ---
 slice_id: SLICE-06
-status: In Review
+status: Shipped
 validated_at: 2026-07-09
+finalized_at: 2026-07-09
 ---
 
 # Validation Report — SLICE-06: Discount Modeling
@@ -10,9 +11,9 @@ validated_at: 2026-07-09
 
 | Repo      | Branch                            | Commit SHA                               | State |
 | --------- | --------------------------------- | ---------------------------------------- | ----- |
-| knowledge | 001-platform-baseline             | df03dac (pre-PR)                         | clean |
-| frontend  | agent/slice-06-discount-modeling  | a2899061f3d3acfe8651b01202d0d0fb98179b09 | clean |
-| backend   | agent/slice-06-discount-modeling  | 6237d9de0073a6d3d76f61a13f49162b15ad0055 | clean |
+| knowledge | 001-platform-baseline             | 7b0dfd7                                  | clean |
+| frontend  | main (merged PR #8)               | 8b6f4a452e40ef16b4dd58eb1101b0ade005cfb4 | clean |
+| backend   | main (merged PR #6)               | 0b6d58450fac7ba2970511d23eaf807505a5a097 | clean |
 
 ## Artifact Paths
 
@@ -131,4 +132,15 @@ None required.
 
 ## Remaining Blockers
 
-None. Ready for PR review.
+None.
+
+## Finalization
+
+| Item | Detail |
+|---|---|
+| Backend PR | [demo-backend #6](https://github.com/saadnaveed-amaskit/demo-backend/pull/6) — merged 2026-07-09T06:55:45Z |
+| Frontend PR | [demo-frontend #8](https://github.com/saadnaveed-amaskit/demo-frontend/pull/8) — merged 2026-07-09T06:55:09Z |
+| Backend merge SHA | `0b6d58450fac7ba2970511d23eaf807505a5a097` |
+| Frontend merge SHA | `8b6f4a452e40ef16b4dd58eb1101b0ade005cfb4` |
+| Contract promoted | `contracts/slice-06-discount-modeling/contract.md` Draft → **Stable** |
+| Slice status | **Complete** |

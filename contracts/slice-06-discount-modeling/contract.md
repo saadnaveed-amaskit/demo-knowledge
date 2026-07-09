@@ -1,5 +1,5 @@
 ---
-status: Draft
+status: Stable
 artifact_type: api-contract
 slice_id: SLICE-06
 feature_id: 001-platform-baseline

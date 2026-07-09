@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-06: Discount Modeling (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#8](https://github.com/saadnaveed-amaskit/demo-frontend/pull/8) merged to `main` — merge SHA `8b6f4a452e40ef16b4dd58eb1101b0ade005cfb4`. DiscountModelingScreen at `/discount-modeling`: grouped model list (new/draft/pending/approved/denied/returned); CreateForm (RHF+Zod): name, focus group async select, date range, format, depth/BOGO, channel; Run Model gated by `isRunEnabled`; OutputView: narrative, copyable marketing handle, 5 KPIs, ResponsiveLine (revenue + margin forecasts), ResponsiveBar (units forecast), rollup table (By Division / By Channel tabs + CSV export), 6 collapsible risk panels with hard-violation banner; sell-through color coding ≥85% teal / ≥70% amber / <70% red.
+- **backend:** PR [#6](https://github.com/saadnaveed-amaskit/demo-backend/pull/6) merged to `main` — merge SHA `0b6d58450fac7ba2970511d23eaf807505a5a097`. DiscountModelingController (7 endpoints: list, get, create, run, submit, updateStatus, delete 204). DiscountModelingService with in-memory store; deterministic placeholder computation (SKU count × avgPrice=29.99 × rate × unitLiftFactor=1.2); 5 division rollup rows; 6 risk panels; marketing handle format `TCP-PCT-20-DIG-SUMMER-202607`; status lifecycle: new → draft → pending → approved/denied/returned. `FocusSetsService` injected for `productCount` lookup.
+- **Requirements:** REQ-DISC-001…010 covered. Open Q1 resolved: deterministic placeholder behind stable contract shape; real ML deferred.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-06.md` — PASS (80 backend tests, 18/18 BDD scenarios — 3 new + 15 existing; `npm run check` + build green on both repos). 0 patch attempts.
+- **Contracts promoted:** `contracts/slice-06-discount-modeling/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; in-memory store resets on restart; real ML model deferred (locked contract shape); SLICE-09 (Approvals queue) now unblocked by SLICE-06 completing.
+- **Next:** SLICE-07 (Price Scenario optimization) or SLICE-08 (Deep Dive) — both approved. SLICE-09 now also unblocked.
+
 ## 2026-07-09 — SLICE-05: Promotions calendar (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`
