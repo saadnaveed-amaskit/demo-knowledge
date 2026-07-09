@@ -1,7 +1,8 @@
 ---
 slice_id: SLICE-07
-status: In Review
+status: Shipped
 validated_at: 2026-07-09
+finalized_at: 2026-07-09
 ---
 
 # Validation Report — SLICE-07: Price Scenario Optimization
@@ -10,9 +11,9 @@ validated_at: 2026-07-09
 
 | Repo      | Branch                            | Commit SHA                               | State |
 | --------- | --------------------------------- | ---------------------------------------- | ----- |
-| knowledge | 001-platform-baseline             | 9651eeb (pre-PR)                         | clean |
-| frontend  | agent/slice-07-price-scenario     | 90f4f425f994da621bf3f27095e10bd152b77f28 | clean |
-| backend   | agent/slice-07-price-scenario     | c7a2cfefe9ea22ce0a8b588501be69e034673ec9 | clean |
+| knowledge | 001-platform-baseline             | 9f7593f                                  | clean |
+| frontend  | main (merged PR #9)               | 60667f636b2a401958f0248768a00d8f824540a3 | clean |
+| backend   | main (merged PR #7)               | 34790ae73f7e4d21bc74760e928f16a09f9c2dbd | clean |
 
 ## Artifact Paths
 
@@ -149,4 +150,15 @@ None required.
 
 ## Remaining Blockers
 
-None. Ready for PR review.
+None.
+
+## Finalization
+
+| Item | Detail |
+|---|---|
+| Backend PR | [demo-backend #7](https://github.com/saadnaveed-amaskit/demo-backend/pull/7) — merged 2026-07-09T07:24:23Z |
+| Frontend PR | [demo-frontend #9](https://github.com/saadnaveed-amaskit/demo-frontend/pull/9) — merged 2026-07-09T07:24:01Z |
+| Backend merge SHA | `34790ae73f7e4d21bc74760e928f16a09f9c2dbd` |
+| Frontend merge SHA | `60667f636b2a401958f0248768a00d8f824540a3` |
+| Contract promoted | `contracts/slice-07-price-scenario/contract.md` Draft → **Stable** |
+| Slice status | **Complete** |

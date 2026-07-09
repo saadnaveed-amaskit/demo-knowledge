@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-07: Price Scenario Optimization (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#9](https://github.com/saadnaveed-amaskit/demo-frontend/pull/9) merged to `main` — merge SHA `60667f636b2a401958f0248768a00d8f824540a3`. PriceScenariosScreen at `/scenario`: scenario list grouped newest-first; CreateForm with three linked objective sliders (Revenue/Gross Margin/Sell-Through) summing to 100% via proportional redistribution; optimization level slider with risk band labels (Conservative/Moderate/Balanced/Aggressive/Full Optimization); FrontierChart (@nivo/line + custom SVG MarkerLayer for Current/ML Rec/Scenario points); 3-column comparison table (7 metrics); AI narrative + uncertainty framing (±8–15%); tagged recommendations (4 tags); guardrail compliance panel; submit/resubmit/discard with confirm dialog; freeze when pending/approved/denied; change request comment banner for returned scenarios.
+- **backend:** PR [#7](https://github.com/saadnaveed-amaskit/demo-backend/pull/7) merged to `main` — merge SHA `34790ae73f7e4d21bc74760e928f16a09f9c2dbd`. PriceScenariosController (7 endpoints: list, get, create, run, submit, updateStatus, delete 204). PriceScenariosService with in-memory store; deterministic placeholder computation (11-point frontier, 7 comparison metrics, 4 tagged recommendations); GuardrailsService injected for live guardrail evaluation on run(); status lifecycle: new → draft → pending → approved/denied/returned; ChangeRequest history appended on return.
+- **Requirements:** REQ-SCEN-001…011 covered. REQ-SCEN-010 (dashboard deep-link pre-fill) skipped — `[NEEDS CLARIFICATION]`, no live caller. REQ-GUARD-005 (surface guardrails in scenario creation) satisfied via GuardrailsService injection.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-07.md` — PASS (100 backend tests, 22/22 BDD scenarios — 4 new + 18 existing; `npm run check` + build green). 0 patch attempts.
+- **Contracts promoted:** `contracts/slice-07-price-scenario/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; in-memory store resets on restart; real ML deferred (locked contract shape); REQ-SCEN-010 dashboard deep-link deferred; SLICE-08 (Deep Dive) and SLICE-09 (Approvals) now fully unblocked.
+- **Next:** SLICE-08 (Deep Dive, depends on SLICE-07 ✓) or SLICE-09 (Approvals queue, depends on SLICE-06 ✓, SLICE-07 ✓, SLICE-04 ✓ — all now complete).
+
 ## 2026-07-09 — SLICE-06: Discount Modeling (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`
