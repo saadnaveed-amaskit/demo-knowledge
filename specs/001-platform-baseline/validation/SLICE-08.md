@@ -9,11 +9,18 @@ artifact_type: validation-report
 
 ## Repo State at Validation
 
-| Repo       | Branch                    | Commit    | Status |
-|------------|---------------------------|-----------|--------|
-| knowledge  | 001-platform-baseline     | f2fcade   | Clean  |
-| backend    | agent/slice-08-deep-dive  | 2898870   | Clean  |
-| frontend   | agent/slice-08-deep-dive  | ff4b6f3   | Clean  |
+| Repo       | Branch                    | Commit (impl)  | Merge SHA (main)   | Status   |
+|------------|---------------------------|----------------|--------------------|----------|
+| knowledge  | 001-platform-baseline     | 7a41c57        | —                  | Clean    |
+| backend    | agent/slice-08-deep-dive  | 2898870        | 506d508 (PR #8)    | Merged   |
+| frontend   | agent/slice-08-deep-dive  | ff4b6f3        | bcedd79 (PR #10)   | Merged   |
+
+## Merged PRs
+
+| Repo     | PR | Merged at           | Merge SHA   |
+|----------|----|---------------------|-------------|
+| backend  | [#8](https://github.com/saadnaveed-amaskit/demo-backend/pull/8) | 2026-07-09T08:33:14Z | `506d508b305ed50e478ddbab781f302b9332bf5c` |
+| frontend | [#10](https://github.com/saadnaveed-amaskit/demo-frontend/pull/10) | 2026-07-09T08:32:41Z | `bcedd797bea7f200553edb551d1c14ee230cd9c5` |
 
 ## Artifact Paths
 

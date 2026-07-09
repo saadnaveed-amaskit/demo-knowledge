@@ -1,9 +1,12 @@
 ---
-status: Draft
+status: Stable
 slice_id: SLICE-08
 contract_type: api-contract
-approved_by:
-approved_at:
+approved_by: Saad
+approved_at: 2026-07-09
+promoted_at: 2026-07-09
+frontend_pr: "https://github.com/saadnaveed-amaskit/demo-frontend/pull/10"
+backend_pr: "https://github.com/saadnaveed-amaskit/demo-backend/pull/8"
 ---
 
 # Contract: Slice 08 — Deep Dive

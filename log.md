@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-08: Deep Dive (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#10](https://github.com/saadnaveed-amaskit/demo-frontend/pull/10) merged to `main` — merge SHA `bcedd797bea7f200553edb551d1c14ee230cd9c5`. DeepDiveSection integrated into PriceScenariosScreen as a second output tab alongside the existing Summary tab. Four sub-tabs: All (summary counts), Price Adjustments (AG Grid with grouped column sets: Item Overview / Pricing / Financials / Inventory / Action; Products/SKUs view toggle; CSV export; hidden `aria-hidden` anchor pattern for BDD testability), Marketing tiles (5 cards with expandable per-product list + CSV), Discount tiles (5 cards with expandable per-product list + CSV). Explain modal per row (rationale, driving objectives, decision ladder, contextual factors — derived client-side from row data). Progressive unlock: visible rows/tiles filtered by `localLevel ≤ unlockLevel` as optimization slider changes. Guardrails BDD timing fix: replaced `waitFor(attached)` with `page.waitForFunction` polling in guardrails-management step.
+- **backend:** PR [#8](https://github.com/saadnaveed-amaskit/demo-backend/pull/8) merged to `main` — merge SHA `506d508b305ed50e478ddbab781f302b9332bf5c`. `GET /price-scenarios/:id/deep-dive` endpoint returning `DeepDiveOutput` (up to 20 `SkuRecommendationRow` items with `unlockLevel` 0–100 rounded to nearest 10; 5 `MarketingTile` + 5 `DiscountTile` at unlock levels 0/20/40/60/80). Fixed pre-existing `no-constant-condition` lint error and unused-variable ESLint errors in promotions spec files.
+- **Requirements:** REQ-DEEP-001…005 all covered.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-08.md` — PASS (105 backend tests, 24/24 BDD scenarios — 2 new deep-dive + 22 existing; `npm run check` + build green on both repos). 1 patch attempt (promotions ESLint + guardrails BDD timing).
+- **Contracts promoted:** `contracts/slice-08-deep-dive/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; in-memory store resets on restart; Explain trace is client-side derived (no ML explainability API yet); AG Grid cell renderers not directly Playwright-accessible — hidden anchor pattern now established convention.
+- **Next:** SLICE-09 (Approvals queue, depends on SLICE-06 ✓, SLICE-07 ✓, SLICE-04 ✓ — all complete).
+
 ## 2026-07-09 — SLICE-07: Price Scenario Optimization (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

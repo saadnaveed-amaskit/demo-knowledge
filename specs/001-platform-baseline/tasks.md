@@ -46,7 +46,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 | SLICE-05 | Promotions calendar | Complete | frontend, backend | SLICE-02 | P2 |
 | SLICE-06 | Discount Modeling | Complete | frontend, backend | SLICE-02 | P2 |
 | SLICE-07 | Price Scenario optimization | Complete | frontend, backend | SLICE-02, SLICE-04 | P2 |
-| SLICE-08 | Deep Dive | Approved | frontend, backend | SLICE-07 | P2 |
+| SLICE-08 | Deep Dive | Complete | frontend, backend | SLICE-07 | P2 |
 | SLICE-09 | Approvals queue | Approved | frontend, backend | SLICE-06, SLICE-07, SLICE-04 | P2 |
 | SLICE-10 | Agent roster | Approved | frontend, backend | SLICE-01 | P3 |
 | SLICE-11 | Pricing Autonomy | Approved | frontend, backend | SLICE-10 | P3 |
@@ -485,7 +485,9 @@ Expected PRs:
 
 ## Slice `SLICE-08` — `Deep Dive`
 
-Status: Approved
+Status: Complete
+
+Shipped: frontend PR [#10](https://github.com/saadnaveed-amaskit/demo-frontend/pull/10) (`bcedd79`) + backend PR [#8](https://github.com/saadnaveed-amaskit/demo-backend/pull/8) (`506d508`) merged to `main` 2026-07-09. Validation: `validation/SLICE-08.md` (PASS, 1 patch attempt).
 
 Target repos:
 - frontend, backend
@@ -503,34 +505,34 @@ Contracts needed:
 - yes — `knowledge/contracts/slice-08-deep-dive/` (per-SKU recommendation detail + explainability trace; placeholder v1)
 
 Expected PRs:
-- frontend PR
-- backend PR
-- knowledge finalization commit after merge
+- frontend PR [#10](https://github.com/saadnaveed-amaskit/demo-frontend/pull/10) ✓ merged
+- backend PR [#8](https://github.com/saadnaveed-amaskit/demo-backend/pull/8) ✓ merged
+- knowledge finalization commit ✓
 
 ### Acceptance-Test-First Tasks
-- [ ] Add `deep-dive.feature` (Explain modal, progressive unlock) before UI
-- [ ] Add Playwright step definitions; run and confirm expected failure
-- [ ] Add backend contract test for per-SKU detail + trace; run and confirm expected failure
-- [ ] Record expected failures in validation notes
+- [x] Add `deep-dive.feature` (Explain modal, progressive unlock) before UI
+- [x] Add Playwright step definitions; run and confirm expected failure
+- [x] Add backend contract test for per-SKU detail + trace; run and confirm expected failure
+- [x] Record expected failures in validation notes
 
 ### Backend Tasks
-- [ ] Contract in `contracts/slice-08-deep-dive/`; per-SKU recommendation detail + decision-ladder trace (placeholder)
+- [x] Contract in `contracts/slice-08-deep-dive/`; per-SKU recommendation detail + decision-ladder trace (placeholder)
 
 ### Frontend Tasks
-- [ ] Four tabs (All/Price Adjustments/Marketing/Discounts); AG Grid grouped columns + Products/SKUs toggle + CSV export
-- [ ] Explain modal (rationale, objectives, decision ladder, contextual factors)
-- [ ] Marketing/Discount tiles with expandable per-product lists; progressive unlock by optimization-level thresholds
+- [x] Four tabs (All/Price Adjustments/Marketing/Discounts); AG Grid grouped columns + Products/SKUs toggle + CSV export
+- [x] Explain modal (rationale, objectives, decision ladder, contextual factors)
+- [x] Marketing/Discount tiles with expandable per-product lists; progressive unlock by optimization-level thresholds
 
 ### Validation Tasks
-- [ ] Run unit / integration / BDD / E2E vs real backend
-- [ ] Run `npm run check` + build (both repos)
-- [ ] Create validation report `validation/SLICE-08.md`
+- [x] Run unit / integration / BDD / E2E vs real backend
+- [x] Run `npm run check` + build (both repos)
+- [x] Create validation report `validation/SLICE-08.md`
 
 ### Patcher Tasks
-- [ ] Up to 3 scoped patch attempts; record each; blocker report after 3
+- [x] 1 patch attempt: fixed promotions ESLint + guardrails BDD timing
 
 ### Completion Criteria
-- REQ-DEEP-* scenarios green; unlock thresholds correct; `npm run check` passes.
+- [x] REQ-DEEP-* scenarios green; unlock thresholds correct; `npm run check` passes.
 
 ## Slice `SLICE-09` — `Approvals queue`
 
