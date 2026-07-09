@@ -43,7 +43,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 | SLICE-02 | Focus Set management | Complete | frontend, backend | SLICE-01 | P1 |
 | SLICE-03 | Product Grid | Complete | frontend, backend | SLICE-02 | P1 |
 | SLICE-04 | Guardrails management | Complete | frontend, backend | SLICE-01 | P1 |
-| SLICE-05 | Promotions calendar | Approved | frontend, backend | SLICE-02 | P2 |
+| SLICE-05 | Promotions calendar | In Review | frontend, backend | SLICE-02 | P2 |
 | SLICE-06 | Discount Modeling | Approved | frontend, backend | SLICE-02 | P2 |
 | SLICE-07 | Price Scenario optimization | Approved | frontend, backend | SLICE-02, SLICE-04 | P2 |
 | SLICE-08 | Deep Dive | Approved | frontend, backend | SLICE-07 | P2 |
@@ -335,7 +335,7 @@ Expected PRs:
 
 ## Slice `SLICE-05` — `Promotions calendar`
 
-Status: Approved
+Status: In Review
 
 Target repos:
 - frontend, backend
