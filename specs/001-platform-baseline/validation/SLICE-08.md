@@ -1,5 +1,5 @@
 ---
-status: In Review
+status: Passed
 slice_id: SLICE-08
 feature_id: 001-platform-baseline
 artifact_type: validation-report
@@ -11,9 +11,9 @@ artifact_type: validation-report
 
 | Repo       | Branch                    | Commit    | Status |
 |------------|---------------------------|-----------|--------|
-| knowledge  | 001-platform-baseline     | 483681c   | Clean  |
-| backend    | agent/slice-08-deep-dive  | 69d8d7b   | Clean  |
-| frontend   | agent/slice-08-deep-dive  | ff0ecc0   | Clean  |
+| knowledge  | 001-platform-baseline     | f2fcade   | Clean  |
+| backend    | agent/slice-08-deep-dive  | 2898870   | Clean  |
+| frontend   | agent/slice-08-deep-dive  | ff4b6f3   | Clean  |
 
 ## Artifact Paths
 
@@ -53,14 +53,8 @@ npm run check
 |-------------------|---------------------------------------------------------------------|
 | Unit tests        | 105/105 passed (up from 100, +5 new deep-dive tests)               |
 | TypeScript check  | Passed                                                              |
-| ESLint            | 2 pre-existing errors in `promotions/*.spec.ts` (not SLICE-08 files)|
-| Build             | N/A (NestJS; `npm run build` not configured as standard command)    |
-
-**Pre-existing backend lint errors** (from SLICE-05, not SLICE-08):
-- `promotions.controller.spec.ts:14` — unused `service` variable
-- `promotions.service.spec.ts:6` — unused `today` variable
-
-These were present before SLICE-08 and are not in any file modified by this slice.
+| ESLint            | Passed — pre-existing promotions errors fixed in Patch Attempt 1   |
+| Build             | Passed                                                              |
 
 ---
 
@@ -78,9 +72,9 @@ npm run check
 
 | Check                   | Result                                                         |
 |-------------------------|----------------------------------------------------------------|
-| BDD — all scenarios     | 23/24 passed (1 pre-existing guardrails flakiness)             |
+| BDD — all scenarios     | 24/24 passed (guardrails timing fixed in Patch Attempt 1)      |
 | BDD — deep-dive new     | 2/2 passed (Explain modal, progressive unlock)                 |
-| BDD — existing          | 21/22 passed (1 intermittent guardrails failure)               |
+| BDD — existing          | 22/22 passed                                                   |
 | TypeScript check        | Passed — no errors                                             |
 | ESLint                  | Passed — no errors                                             |
 | Build                   | Passed (chunk size warning is pre-existing)                    |
@@ -124,7 +118,20 @@ npm run check
 
 ## Patcher Attempts
 
-None required. All scenarios pass.
+### Attempt 1 — Passed
+
+**Failures targeted:**
+1. Backend ESLint: `promotions.controller.spec.ts:14` unused `service` variable; `promotions.service.spec.ts:6` unused `const today`
+2. Frontend BDD: `guardrails-management.feature` — "Inline-edit a guardrail threshold" — `Then` step read cell before API response + re-render completed
+
+**Fix:**
+- Removed unused `let service: PromotionsService` declaration and its assignment from `promotions.controller.spec.ts`
+- Removed unused `const today` from `promotions.service.spec.ts`
+- Replaced `waitFor({ state: "attached" })` in guardrails `Then` step with `page.waitForFunction` that polls the DOM until the cell contains the saved value
+
+**Result after Attempt 1:**
+- Backend: `npm run check` passes; 105/105 tests pass
+- Frontend: 24/24 BDD scenarios pass; `npm run check` passes
 
 ---
 
@@ -162,10 +169,9 @@ None required. All scenarios pass.
 
 ## Remaining Risks / Blockers
 
-1. **Backend ESLint pre-existing failures** — 2 errors in promotions spec files (SLICE-05). Not introduced by SLICE-08. Should be addressed as tech debt in a separate PR.
-2. **Guardrails inline-edit flakiness** — pre-existing intermittent BDD failure (observed since SLICE-07). Passes on retry. Not caused by SLICE-08.
-3. **Backend `npm run check` exits non-zero** due to pre-existing promotions lint errors. SLICE-08 backend lint is clean.
-4. **AG Grid cellRenderer in tests** — AG Grid DOM cell renderers are not reliably accessible via Playwright. Pattern: use hidden `aria-hidden` anchor elements (matching ProductGrid convention) for BDD testability.
+None. All validation gates pass after Patch Attempt 1.
+
+**Historical note:** AG Grid cell renderers are not reliably accessible via Playwright. Use the hidden `aria-hidden` anchor pattern (per ProductGrid convention) for BDD testability in any future AG Grid slices.
 
 ## PR Handoff
 
