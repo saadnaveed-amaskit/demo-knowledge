@@ -586,7 +586,7 @@ Expected PRs:
 
 ## Slice `SLICE-10` — `Agent roster`
 
-Status: Approved
+Status: In Review
 
 Target repos:
 - frontend, backend
