@@ -2,9 +2,9 @@
 
 ## Status
 
-**Merged; knowledge finalization pending**
+Complete
 
-Both the frontend PR ([#11](https://github.com/saadnaveed-amaskit/demo-frontend/pull/11)) and backend PR ([#9](https://github.com/saadnaveed-amaskit/demo-backend/pull/9)) are merged to `main`. `knowledge/specs/001-platform-baseline/tasks.md` currently records this slice's `Status:` as `In Review`, and its validation report (`knowledge/specs/001-platform-baseline/validation/SLICE-09.md`) has front matter `status: Draft`. Neither has been updated to reflect the merge. This slice should not be marked `Complete` in the wiki until `/finalize-knowledge-after-merge SLICE-09` (or equivalent) updates those knowledge artifacts and `knowledge/log.md` gains a corresponding SHIPPED entry, matching the pattern used for SLICE-00 through SLICE-08.
+Finalized 2026-07-09 via `/finalize-knowledge-after-merge SLICE-09`. Both the frontend PR ([#11](https://github.com/saadnaveed-amaskit/demo-frontend/pull/11)) and backend PR ([#9](https://github.com/saadnaveed-amaskit/demo-backend/pull/9)) are merged to `main`; `knowledge/specs/001-platform-baseline/tasks.md`'s `Status:` field and the validation report's front matter (`knowledge/specs/001-platform-baseline/validation/SLICE-09.md`, now `status: Shipped`) have been updated to match, and the per-slice contract reference (`knowledge/contracts/slice-09-approvals/contract.md`) was promoted from `Draft` to `Stable`.
 
 ## Source Snapshot
 
@@ -31,7 +31,7 @@ Deny requires a reason; returning a discount model for changes requires a commen
 
 - Frontend: `frontend/src/screens/approvals/` (`ApprovalsScreen.tsx`, `approval-types.ts`, `approvals-api.ts`); wired into `frontend/src/app/routes.tsx`
 - Backend: `backend/src/approvals/` (`approvals.controller.ts`, `approvals.service.ts`, `approval-types.ts`, `approvals.controller.spec.ts`); wired into `backend/src/app.module.ts`
-- Contract: `knowledge/contracts/slice-09-approvals/contract.md` (`Draft`); `backend/contracts/api-contract.md` (Approvals paths/schemas); `backend/contracts/api-contract.yaml` — **no longer present on `main`** (deleted in commit `bb1a951`)
+- Contract: `knowledge/contracts/slice-09-approvals/contract.md` (`Stable`); `backend/contracts/api-contract.md` (Approvals paths/schemas); `backend/contracts/api-contract.yaml` — **no longer present on `main`** (deleted in commit `bb1a951`)
 - Tests: `frontend/features/approvals-queue.feature`, `frontend/tests/bdd/steps/approvals-queue.steps.ts`
 
 ## Frontend Notes
@@ -52,11 +52,10 @@ BDD: `features/approvals-queue.feature` (4 scenarios) / `tests/bdd/steps/approva
 
 ## Validation Summary
 
-Per `knowledge/specs/001-platform-baseline/validation/SLICE-09.md` (front matter `status: Draft`): backend 113/113 tests pass, `npm run check` passes in both repos; frontend 28/28 BDD scenarios pass (4 new + no regressions), `npx vitest run` and `npm run check` pass. REQ-APPR-001…004, 006, 007, 009…012 pass; REQ-APPR-005/008 are recorded as **deferred**, not failing.
+Per `knowledge/specs/001-platform-baseline/validation/SLICE-09.md` (front matter `status: Shipped`): backend 113/113 tests pass, `npm run check` passes in both repos; frontend 28/28 BDD scenarios pass (4 new + no regressions), `npx vitest run` and `npm run check` pass. REQ-APPR-001…004, 006, 007, 009…012 pass; REQ-APPR-005/008 are recorded as **deferred**, not failing.
 
 ## Known Limitations / Follow-ups
 
 - **REQ-APPR-005 / REQ-APPR-008 deferred**: no `BusinessIssueEntity`/action-tracker subsystem exists anywhere in the codebase, and spec Open Question 9 (closed-loop automation scope) remains unresolved. A follow-up slice is recommended once that entity design is settled.
 - `submitter`/`team`/`brand`/`division` remain v1 placeholders pending real identity capture (out of scope per spec's identity-provider note).
 - `backend/contracts/api-contract.yaml` was deleted from `main` after this slice's work added Approvals entries to it — only `api-contract.md` currently exists.
-- **Knowledge finalization is still needed**: update `tasks.md`'s SLICE-09 status, the validation report's front matter, and add a `knowledge/log.md` entry once finalization runs.

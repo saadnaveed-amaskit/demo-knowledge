@@ -1,11 +1,28 @@
 ---
-status: Draft
+status: Shipped
 artifact_type: validation-report
 slice_id: SLICE-09
 feature_id: 001-platform-baseline
 ---
 
 # Validation Report — SLICE-09: Approvals Queue
+
+## Finalization (post-merge)
+
+| Repo | Branch | Impl commit | Merge SHA (main) | Status |
+|---|---|---|---|---|
+| knowledge | 001-platform-baseline | 0c45b62 | — | Clean |
+| backend | agent/slice-09-approvals-queue | f192964 | a6df300 (PR #9) | Merged |
+| frontend | agent/slice-09-approvals-queue | 0c7388e | d234cdb (PR #11) | Merged |
+
+## Merged PRs
+
+| Repo | PR | Merged at | Merge SHA |
+|---|---|---|---|
+| frontend | [#11](https://github.com/saadnaveed-amaskit/demo-frontend/pull/11) | 2026-07-09T10:59:29Z | d234cdbd42bc66353e1e0836a4c32152bbfaa828 |
+| backend | [#9](https://github.com/saadnaveed-amaskit/demo-backend/pull/9) | 2026-07-09T11:00:52Z | a6df30032fabb22b0f07263469a0c787b0efd12b |
+
+`backend/contracts/api-contract.md` was created in this slice's line of work (commit `3abcf7c`), and `backend/contracts/api-contract.yaml` had Approvals endpoints added (commit `f192964`) before being deleted from `main` entirely in a later, separate commit (`bb1a951`, "deleted redundant file") — only `api-contract.md` exists on `main` as of finalization.
 
 ## Context
 

@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-09 — SLICE-09: Approvals Queue (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#11](https://github.com/saadnaveed-amaskit/demo-frontend/pull/11) merged to `main` — merge SHA `d234cdbd42bc66353e1e0836a4c32152bbfaa828`. `ApprovalsScreen` at `/approvals`: two-tab pending queue (Price Scenarios / Discounts) with pending-count badges, risk badges, and Approve/Deny/Request Changes row actions; deny and request-changes both require a non-empty reason/comment (client-side disabled confirm button + server-side enforcement); read-only decided table; scenario review reuses SLICE-07's `ScenarioOutput` (narrative, comparison table, guardrail results); discount review shows a risk banner (hard/advisory counts), impact, and constraint warnings, deliberately without a guardrail list or SKU breakdown per REQ-APPR-009.
+- **backend:** PR [#9](https://github.com/saadnaveed-amaskit/demo-backend/pull/9) merged to `main` — merge SHA `a6df30032fabb22b0f07263469a0c787b0efd12b`. `ApprovalsController`/`ApprovalsService` (6 endpoints: queue, decided, scenario review, discount review, scenario decision, discount decision). No new Tier-1 entity — aggregates `PriceScenariosService`/`DiscountModelingService` on every read into Tier-2 `ApprovalItemView`/`ApprovalsQueueView`/`ScenarioReviewView`/`DiscountReviewView`. Risk derived per REQ-APPR-011 (discount: hard/any-violation panel counts; scenario: falls back to the existing Inventory Risk comparison value). Discount change-request history kept in an in-memory decision log (workaround for `DiscountModelEntity` having no `changeRequests` field). `backend/contracts/api-contract.md` created (mechanically generated from `api-contract.yaml`); Approvals endpoints added to `api-contract.yaml` in commit `f192964`, though `api-contract.yaml` was later deleted from `main` entirely in a separate, unrelated commit `bb1a951` ("deleted redundant file").
+- **Requirements:** REQ-APPR-001…004, 006, 007, 009…012 covered. REQ-APPR-007 updated 2026-07-09 (was "optional" for scenario request-changes comment, now mandatory) to resolve REQ-APPR-012/Open Q5: one consistent reason-required policy (mandatory for deny, request-changes, and return-for-changes), resolved by human decision. **REQ-APPR-005 and REQ-APPR-008 deferred** — no `BusinessIssueEntity`/action-tracker subsystem exists anywhere in the codebase; spec Open Q9 remains unresolved.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-09.md` — Shipped (backend 113/113 tests, `npm run check` green on both repos; frontend 28/28 BDD scenarios — 4 new + no regressions — `npx vitest run` and `npm run check` green). 0 patch attempts.
+- **Contracts promoted:** `contracts/slice-09-approvals/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; in-memory store resets on restart; REQ-APPR-005/008 deferred pending a `BusinessIssueEntity`/action-tracker design (spec Open Q9); `submitter`/`team`/`brand`/`division` remain v1 placeholders pending real identity capture; `backend/contracts/api-contract.yaml` no longer exists on `main` — only `api-contract.md` remains.
+- **Next:** SLICE-10 (Agent roster, depends on SLICE-01 ✓) is the next `Approved` slice by dependency order; SLICE-11…14 remain `Approved` but blocked on their own dependencies or open spec questions.
+
 ## 2026-07-09 — SLICE-08: Deep Dive (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

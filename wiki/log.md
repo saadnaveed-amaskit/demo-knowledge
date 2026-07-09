@@ -2,6 +2,36 @@
 
 Chronological record of `/update-code-wiki` runs. Newest first.
 
+### 2026-07-09 — finalize-knowledge-after-merge-SLICE-09
+
+| Field | Value |
+|---|---|
+| mode | targeted finalization (`/finalize-knowledge-after-merge SLICE-09`) |
+| knowledge commit | bc55cb18dcb1914a150d929b301246bfbf630ed3 |
+| frontend commit | d234cdbd42bc66353e1e0836a4c32152bbfaa828 |
+| backend commit | a6df30032fabb22b0f07263469a0c787b0efd12b |
+| API contract changed | No — `backend/contracts/api-contract.md` was read for confirmation only, not modified, by this run |
+| validation report | knowledge/specs/001-platform-baseline/validation/SLICE-09.md (front matter updated `Draft` → `Shipped`) |
+| PR links | frontend [#11](https://github.com/saadnaveed-amaskit/demo-frontend/pull/11); backend [#9](https://github.com/saadnaveed-amaskit/demo-backend/pull/9) |
+
+Updated wiki files:
+
+- knowledge/wiki/features/SLICE-09.md (updated — status `Merged; knowledge finalization pending` → `Complete`)
+- knowledge/wiki/index.md (updated — SLICE-09 row → `Complete`; removed the now-resolved finalization-pending gap)
+
+Other knowledge files updated (non-wiki):
+
+- knowledge/specs/001-platform-baseline/tasks.md (SLICE-09 `Status:` line and Slice Index table row → `Complete`)
+- knowledge/specs/001-platform-baseline/validation/SLICE-09.md (front matter `status: Draft` → `Shipped`; added Finalization/Merged PRs sections)
+- knowledge/contracts/slice-09-approvals/contract.md (front matter `status: Draft` → `Stable`)
+
+Templates: all 8 required templates under `knowledge/wiki/_templates/` already existed and were reused as-is; none created or overwritten.
+
+Known gaps:
+
+- `backend/contracts/api-contract.yaml` remains deleted from `main` (commit `bb1a951`); only `api-contract.md` exists. Unaffected by this finalization.
+- `api-contract.md`'s own embedded Source table still shows the pre-merge feature branch/commit rather than current `main` — unchanged by this run per the "do not edit api-contract.md" constraint.
+
 ### 2026-07-09 — update-code-wiki-baseline-1
 
 | Field | Value |

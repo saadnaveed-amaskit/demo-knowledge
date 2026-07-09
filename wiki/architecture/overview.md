@@ -10,7 +10,7 @@
 
 ## System Summary
 
-Retail Nucleus is a pricing-intelligence platform for a retail organization, covering Focus Set curation, product-grid management, guardrail constraints, promotions, discount modeling, price scenario optimization, deep-dive analysis, and (in progress) an approvals workflow. The platform is a three-repo workspace: `knowledge` (specs/plans/tasks/contracts references/validation/wiki), `frontend` (React SPA), and `backend` (NestJS API). Governance follows an approval-gated Speckit workflow (spec → plan → tasks → implementation) recorded in `knowledge/.specify/memory/constitution.md`. The platform baseline is tracked as feature `001-platform-baseline`, broken into 15 implementation slices (SLICE-00 through SLICE-14); 9 are `Complete`, 1 (SLICE-09, Approvals) is merged to `main` in both frontend and backend but not yet finalized in the knowledge repo, and 5 (SLICE-10…14) are `Approved` but not yet implemented.
+Retail Nucleus is a pricing-intelligence platform for a retail organization, covering Focus Set curation, product-grid management, guardrail constraints, promotions, discount modeling, price scenario optimization, deep-dive analysis, and an approvals workflow. The platform is a three-repo workspace: `knowledge` (specs/plans/tasks/contracts references/validation/wiki), `frontend` (React SPA), and `backend` (NestJS API). Governance follows an approval-gated Speckit workflow (spec → plan → tasks → implementation) recorded in `knowledge/.specify/memory/constitution.md`. The platform baseline is tracked as feature `001-platform-baseline`, broken into 15 implementation slices (SLICE-00 through SLICE-14); 10 are `Complete` (SLICE-00…09), and 5 (SLICE-10…14) are `Approved` but not yet implemented.
 
 ## Repository Responsibilities
 
@@ -44,7 +44,6 @@ Frontend screens call small, hand-written `fetch`-wrapper modules (one per scree
 
 ## Known Gaps
 
-- SLICE-09 (Approvals) is merged into `main` in both frontend and backend, but its knowledge-repo artifacts (`tasks.md` slice status, validation report status) have not been finalized to `Complete` — see [SLICE-09](../features/SLICE-09.md).
 - `backend/contracts/api-contract.yaml` was deleted from `main` after being added; only the Markdown contract currently exists in the repo.
 - SLICE-10 (Agent roster), SLICE-11 (Pricing Autonomy), SLICE-12 (Measurement), SLICE-13 (Like-Item Mapping / Cold Start), and SLICE-14 (Configuration) are `Approved` in `tasks.md` but have no implementation, contract, or validation report yet.
 - REQ-APPR-005 and REQ-APPR-008 (cross-domain sub-action drawer and action-tracker linkback) are explicitly deferred within SLICE-09 — no `BusinessIssueEntity`/action-tracker subsystem exists anywhere in the codebase (per `knowledge/specs/001-platform-baseline/validation/SLICE-09.md`).

@@ -35,7 +35,7 @@
 | [SLICE-06](features/SLICE-06.md) | Discount Modeling | Complete |
 | [SLICE-07](features/SLICE-07.md) | Price Scenario optimization | Complete |
 | [SLICE-08](features/SLICE-08.md) | Deep Dive | Complete |
-| [SLICE-09](features/SLICE-09.md) | Approvals queue | Merged; knowledge finalization pending |
+| [SLICE-09](features/SLICE-09.md) | Approvals queue | Complete |
 | [SLICE-10](features/SLICE-10.md) | Agent roster | Approved — not yet implemented |
 | [SLICE-11](features/SLICE-11.md) | Pricing Autonomy | Approved — not yet implemented |
 | [SLICE-12](features/SLICE-12.md) | Measurement | Approved — not yet implemented |
@@ -48,7 +48,6 @@
 
 ## Known Gaps
 
-- SLICE-09 is merged into `main` in both frontend and backend, but knowledge-repo artifacts (`tasks.md` status, validation report status) have not been finalized — see [SLICE-09](features/SLICE-09.md).
 - `backend/contracts/api-contract.yaml` was deleted from `main` (commit `bb1a951`) after being added; only `backend/contracts/api-contract.md` currently exists.
 - `backend/contracts/api-contract.md`'s own embedded Source table has not been regenerated since the SLICE-09 merge and still shows the pre-merge feature branch/commit.
 - SLICE-10 through SLICE-14 are `Approved` in `knowledge/specs/001-platform-baseline/tasks.md` but have no implementation, contract, or validation report yet.
