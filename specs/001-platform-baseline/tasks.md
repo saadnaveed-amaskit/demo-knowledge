@@ -635,7 +635,7 @@ Expected PRs:
 
 ## Slice `SLICE-11` — `Pricing Autonomy`
 
-Status: Approved
+Status: In Review
 
 Target repos:
 - frontend, backend
