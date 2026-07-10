@@ -1,68 +1,33 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.0.1
+- Version change: 1.0.1 → 1.1.0
 - Modified principles:
-  - Workspace Model → added root-level authoritative reference document paths for TECHNOLOGY.md and DATA-TAXONOMY.md
-  - V. Retail Nucleus Library-Pinned Stack → linked detailed mechanics to TECHNOLOGY.md
-  - VI. Retail Nucleus Data Taxonomy Discipline → linked detailed taxonomy mechanics to DATA-TAXONOMY.md
+  - Workspace Model → clarified backend-owned API contract location
+  - I. Multi-Repo Workspace Source of Truth → knowledge references API contracts, backend owns canonical API contract
+  - IV. EARS and Gherkin Requirements → explicitly requires backend API Gherkin for externally observable API behavior
+  - VIII. Contract-First Multi-Repo Development → backend-owned canonical contract and backend API Gherkin/Cucumber required
+  - IX. Acceptance-Test-First Implementation → separate preparation gate before implementation
+  - X. Validation Report and Patcher Agent → backend API BDD/Cucumber and preparation artifact reporting
+  - XI. Knowledge Updated After Code Merge → knowledge records contract references after merge
+  - XII. Scope, Simplicity, and Repository Boundary Control → backend contract ownership clarified
+  - Development Workflow and Quality Gates → added preparation approval gate
 - Added principles:
   - None
 - Templates requiring updates:
-  - None
-- Follow-up TODOs:
-  - Place TECHNOLOGY.md and DATA-TAXONOMY.md at the root of the knowledge repo.
-
-- Version change: 0.0.0 → 1.0.0
-- Modified principles:
-  - None
-- Added principles:
-  - I. Multi-Repo Workspace Source of Truth
-  - II. Pull Latest Before Every Automated Run
-  - III. Artifact Approval Gates
-  - IV. EARS and Gherkin Requirements
-  - V. Retail Nucleus Library-Pinned Stack
-  - VI. Retail Nucleus Data Taxonomy Discipline
-  - VII. Persona-Anchored, Technology-Agnostic Specs
-  - VIII. Contract-First Multi-Repo Development
-  - IX. Acceptance-Test-First Implementation
-  - X. Validation Report and Patcher Agent
-  - XI. Knowledge Updated After Code Merge
-  - XII. Scope, Simplicity, and Repository Boundary Control
-- Client principles incorporated:
-  - Library-pinned stack
-  - Data taxonomy discipline
-  - Test-driven development
-  - Naming and structure conventions
-  - Persona-anchored requirements
-  - Spec-first technology-agnostic requirements
-  - Simplicity first
-  - Design system constraints
-  - Quality gates
-- Templates requiring updates:
-  - .specify/templates/spec-template.md
-  - .specify/templates/plan-template.md
-  - .specify/templates/tasks-template.md
-  - .claude/commands/refresh-workspace.md
-  - .claude/commands/create-spec.md
-  - .claude/commands/create-plan.md
-  - .claude/commands/create-tasks.md
-  - .claude/commands/implement-approved-tasks.md
-  - .claude/commands/create-validation-report.md
-  - .claude/commands/patch-validation-mismatches.md
-  - .claude/commands/finalize-knowledge-after-merge.md
-  - .claude/rules/multi-repo-workspace-safety.md
-  - .claude/rules/artifact-approval-gates.md
-  - .claude/rules/ears-gherkin-requirements.md
-  - .claude/rules/retail-nucleus-tech-policy.md
-  - .claude/rules/contract-first-development.md
+  - .claude/commands/prepare-next-slice.md
+  - .claude/commands/prepare-approved-slice.md
+  - .claude/commands/prepare-approved-feature.md
+  - .claude/commands/implement-next-slice.md
+  - .claude/commands/implement-approved-slice.md
+  - .claude/commands/implement-approved-feature.md
   - .claude/rules/acceptance-test-first.md
+  - .claude/rules/contract-first-development.md
   - .claude/rules/validation-reporting.md
-  - .claude/rules/patcher-agent-scope.md
-  - .claude/rules/post-merge-knowledge-finalization.md
+  - .claude/rules/ears-gherkin-requirements.md
 - Follow-up TODOs:
-  - Create command and rule files that enforce this constitution.
-  - Create artifact templates with required status fields.
-  - Add deterministic hooks later for hard enforcement of repo boundaries and approval gates.
+  - Ensure backend repo has runnable Cucumber/BDD setup for API acceptance tests.
+  - Ensure backend/contracts/api-contract.md exists as the canonical API contract file.
+  - Ensure slice preparation artifacts use `status: Approved` before implementation.
 -->
 
 # Retail Nucleus Multi-Repo Agent Workflow Constitution
@@ -116,22 +81,36 @@ harness-workspace/
 │   ├── DATA-TAXONOMY.md
 │   ├── .specify/memory/constitution.md
 │   ├── specs/
-│   ├── contracts/
-│   └── reports/
+│   ├── reports/
+│   └── wiki/
 ├── frontend/
 └── backend/
+    └── contracts/
+        └── api-contract.md
 ```
 
 The `knowledge` repository is the source of truth for product intent, specifications,
-EARS requirements, Gherkin scenarios, contracts, implementation plans, task breakdowns,
+EARS requirements, Gherkin scenarios, implementation plans, task breakdowns,
 validation reports, shipped-feature history, logs, and wiki-style documentation.
+
+The backend-owned API contract is the canonical machine/human-readable API contract for
+implementation work:
+
+```text
+backend/contracts/api-contract.md
+```
+
+The `knowledge` repository may reference this contract in specs, plans, tasks, validation
+reports, logs, and wiki pages, but it must not duplicate or replace the canonical backend
+contract file.
 
 The `frontend` repository is the implementation target for user interface code,
 frontend unit tests, Cucumber/Playwright acceptance tests, frontend build artifacts,
 and frontend-facing contract consumption.
 
-The `backend` repository is the implementation target for API code, backend unit tests,
-integration tests, backend-owned API contract implementation, and business logic.
+The `backend` repository is the implementation target for API code, backend API Gherkin/
+Cucumber tests, backend unit tests, integration tests, the backend-owned API contract, and
+business logic.
 
 Agents may read all repositories when a workflow requires it, but they must respect the
 repository boundaries defined in this constitution.
@@ -145,8 +124,17 @@ repository boundaries defined in this constitution.
 The `knowledge` repository is the canonical coordination layer for the multi-repo
 workspace.
 
-Specs, plans, tasks, contracts, validation reports, wiki pages, logs, and shipped-feature
-records must live in `knowledge`.
+Specs, plans, tasks, validation reports, wiki pages, logs, and shipped-feature records
+must live in `knowledge`.
+
+The canonical API contract must live in the backend repo at:
+
+```text
+backend/contracts/api-contract.md
+```
+
+`knowledge` artifacts may reference the backend-owned API contract, but must not create a
+separate canonical contract copy.
 
 The `frontend` and `backend` repositories are implementation repositories. They must not
 be treated as the source of truth for product requirements, acceptance criteria, or shipped
@@ -268,6 +256,30 @@ When <trigger> while <state>, the <system> shall <response>.
 
 Every user-facing or externally observable behavior must include Gherkin acceptance
 scenarios.
+
+Externally observable backend/API behavior is included in this requirement.
+
+For any feature or slice that creates or changes backend/API behavior, backend API Gherkin
+scenarios are required unless the preparation or validation artifact explicitly proves that
+no externally observable backend/API behavior changed.
+
+Backend API Gherkin scenarios must describe observable request/response behavior, status
+codes, validation errors, and contract-level outcomes.
+
+Backend API Gherkin scenarios must be executable through backend Cucumber tests that call
+the backend API directly, not through the frontend UI.
+
+Recommended backend locations:
+
+```text
+backend/tests/features/**/*.feature
+backend/tests/steps/**/*.ts
+backend/tests/support/**/*.ts
+```
+
+Contract tests, unit tests, and integration tests may supplement backend API Gherkin
+coverage, but they do not replace backend API Gherkin/Cucumber coverage for externally
+observable API behavior.
 
 Preferred Gherkin form:
 
@@ -394,64 +406,129 @@ implementation details to the plan.
 
 ### VIII. Contract-First Multi-Repo Development
 
-For features involving both backend and frontend, the backend owns the API contract.
+For features involving both backend and frontend, the backend owns the canonical API
+contract.
 
-The `knowledge` repository must contain the approved API contract before implementation
-begins.
-
-The backend implementation must satisfy the approved contract.
-
-The frontend implementation must consume the approved contract.
-
-Frontend tests may mock the contract before the backend is running, but end-to-end validation
-must run against the real frontend and real backend before merge.
-
-For full-stack features, the expected order is:
+The canonical API contract is:
 
 ```text
-1. Define or update contract in the knowledge repo.
-2. Approve contract through spec/plan/tasks gates.
-3. Add backend failing tests against the contract.
-4. Implement backend until tests pass.
-5. Add frontend failing tests against the mocked or real contract.
-6. Implement frontend until tests pass.
-7. Run full end-to-end validation against real frontend + real backend.
+backend/contracts/api-contract.md
 ```
 
+Do not create API contract files under `knowledge/contracts/**`.
+
+Do not create per-feature or per-slice API contract files unless the human explicitly
+changes this rule.
+
+`knowledge` may reference the canonical backend API contract in specs, plans, tasks,
+validation reports, logs, and wiki pages, but it must not own or duplicate the contract
+file.
+
+The backend implementation must satisfy the approved backend-owned contract.
+
+The frontend implementation must consume the approved backend-owned contract.
+
+Frontend tests may mock the contract before the backend is running, but full validation must
+run against the real frontend and real backend before merge.
+
+For full-stack/API features or slices, the expected order is:
+
+```text
+1. Identify API behavior in the approved spec, plan, and tasks.
+2. Update backend/contracts/api-contract.md before backend API implementation.
+3. Prepare backend API Gherkin scenarios for externally observable API behavior.
+4. Prepare backend Cucumber step definitions and API test support.
+5. Prepare backend contract tests against the canonical API contract.
+6. Run backend API Gherkin/Cucumber and contract tests and confirm expected failures.
+7. Human reviews and approves the preparation artifact.
+8. Implement backend until backend API Gherkin/Cucumber and contract tests pass.
+9. Add or run frontend tests against the mocked or real contract before frontend implementation.
+10. Implement frontend until tests pass.
+11. Run end-to-end validation against real frontend and real backend behavior.
+12. Record contract changes and validation results in the relevant knowledge validation report.
+```
+
+Backend API Gherkin/Cucumber scenarios validate externally observable API behavior.
+
+Contract tests validate agreement with the canonical API contract.
+
+Both are required for full-stack/backend API changes unless the preparation or validation
+artifact explains why one is not applicable.
+
+If API contract changes are needed during implementation, update
+`backend/contracts/api-contract.md` only if the change is already covered by approved
+requirements, plans, and tasks. Otherwise, stop and ask for human approval.
+
 **Rationale**: Contract-first development prevents frontend/backend drift and gives each
-repo a clear implementation boundary.
+repo a clear implementation boundary while keeping API ownership in the backend repository.
 
 ---
 
 ### IX. Acceptance-Test-First Implementation
 
-Tests must be written before or alongside implementation, never after.
+Executable acceptance tests must be created before production implementation, never after.
 
-For approved user-facing behavior, executable acceptance tests must be created or updated
-before application implementation begins.
+The acceptance-test creation step must happen in a separate preparation command before
+implementation.
 
-This applies when the feature affects anything a user can:
+For platform slices:
 
 ```text
-see
-click
-filter
-search
-sort
-submit
-edit
-create
-delete
-export
-confirm
-dismiss
-navigate
+/prepare-next-slice
+or
+/prepare-approved-slice <slice-id>
 ```
+
+For standalone features:
+
+```text
+/prepare-approved-feature <feature-id>
+```
+
+The preparation command must:
+
+```text
+1. select or confirm the approved slice/feature;
+2. create or reuse the actual implementation branches in affected implementation repos;
+3. add or update executable acceptance tests only;
+4. run the new or changed tests before implementation;
+5. confirm they fail for the expected missing behavior;
+6. create a preparation artifact in knowledge;
+7. stop for human review.
+```
+
+The preparation command must not implement production code.
+
+The human reviewer must approve the preparation artifact before implementation begins.
+
+For platform slices, the preparation artifact is:
+
+```text
+knowledge/specs/<NNN-platform-baseline>/validation/<slice-id>-preparation.md
+```
+
+For standalone features, the preparation artifact is:
+
+```text
+knowledge/specs/<NNN-feature-slug>/preparation.md
+```
+
+Implementation commands must verify the preparation artifact has:
+
+```text
+status: Approved
+```
+
+before changing production code.
+
+Implementation commands must reuse the implementation branches recorded in the approved
+preparation artifact. They must not create a second implementation branch for the same
+slice/feature unless the human explicitly requests it.
 
 For frontend behavior, acceptance tests should use Cucumber/Gherkin with Playwright-backed
 step definitions when the frontend repo has a runnable BDD setup.
 
-A runnable BDD setup is identified by:
+A runnable frontend BDD setup is identified by:
 
 ```text
 test:bdd package script
@@ -460,24 +537,51 @@ features/** files
 tests/bdd/** files
 ```
 
-The implementation workflow must:
+For backend/API behavior, acceptance tests must use backend API Gherkin scenarios with
+backend Cucumber step definitions when the slice or feature creates or changes externally
+observable API behavior.
 
-1. add or update Gherkin scenarios in the relevant `knowledge/specs/**/spec.md`;
+Recommended backend BDD locations:
+
+```text
+backend/tests/features/**/*.feature
+backend/tests/steps/**/*.ts
+backend/tests/support/**/*.ts
+```
+
+Backend API Gherkin scenarios must exercise the backend API directly through a backend test
+server or API client. They must not drive the frontend UI.
+
+For approved externally observable behavior, the preparation workflow must:
+
+1. add or update Gherkin scenarios in the relevant `knowledge/specs/**/spec.md` if needed;
 2. add or update executable `.feature` files in the affected implementation repo;
-3. add or update step definitions;
-4. run the new or changed test before implementation;
-5. confirm the test fails for the expected missing behavior;
-6. implement the approved task;
-7. rerun the test and make it pass.
+3. add or update step definitions and support utilities;
+4. run the new or changed tests before implementation;
+5. confirm the tests fail for the expected missing behavior;
+6. record the expected failure in the preparation artifact;
+7. stop for human approval.
 
-Unit tests may supplement acceptance tests.
+The implementation workflow must then:
 
-Unit tests must not replace executable acceptance coverage for approved user-facing behavior.
+1. verify the approved preparation artifact;
+2. check out or reuse the branches recorded in the preparation artifact;
+3. rerun the prepared tests and confirm the expected failure still occurs;
+4. implement the approved task;
+5. rerun the prepared tests and make them pass;
+6. run validation and write a validation report.
+
+Unit tests, contract tests, and integration tests may supplement acceptance tests.
+
+They must not replace executable acceptance coverage for approved externally observable
+behavior.
 
 Implemented scenarios must not remain tagged as `@wip`.
 
+Do not delete failing tests to make validation pass.
+
 **Rationale**: Acceptance-test-first development proves the requested behavior before and
-after implementation.
+after implementation while giving humans a review gate before production code is written.
 
 ---
 
@@ -503,11 +607,14 @@ contract path
 test commands run
 unit test results
 integration test results
-BDD/Cucumber results
+frontend BDD/Cucumber results
+backend API BDD/Cucumber results
 E2E test results
 build results
 coverage of EARS requirements
-coverage of Gherkin scenarios
+coverage of frontend Gherkin scenarios
+coverage of backend API Gherkin scenarios
+preparation artifact path and approval status
 mismatches found
 patch attempts made
 remaining blockers
@@ -521,7 +628,7 @@ Example:
 | Requirement | Scenario/Test | Result | Notes |
 |---|---|---|---|
 | EARS-SALES-1 | weekly-sales-aggregates.feature | Passed | UI button visible |
-| EARS-SALES-2 | backend aggregate endpoint test | Failed | Missing week grouping |
+| EARS-SALES-2 | backend API Gherkin scenario + contract test | Failed | Missing week grouping |
 ```
 
 The report must be stored in the knowledge repo.
@@ -581,7 +688,7 @@ After code PRs merge, the agent may update the knowledge repo to reflect shipped
 Post-merge knowledge updates may include:
 
 ```text
-promoting contracts from draft to stable
+recording backend API contract references and changes
 updating wiki pages
 updating feature lists
 updating shipped-feature history
@@ -618,11 +725,13 @@ Repository boundary expectations:
 ```text
 knowledge/
 - specs
-- contracts
+- contract references
 - wiki
 - logs
 - reports
 - feature history
+- preparation artifacts
+- validation reports
 
 frontend/
 - UI code
@@ -632,8 +741,10 @@ frontend/
 
 backend/
 - API code
+- backend API Gherkin/Cucumber tests
 - backend unit tests
 - integration tests
+- backend/contracts/api-contract.md
 - backend-owned contract implementation
 ```
 
@@ -720,31 +831,44 @@ The mandated workflow is:
 8. **Human Gate 3**
    Stop. Human reviews `tasks.md`. Continue only after `status: Approved`.
 
-9. **Acceptance Tests First**
-   Add or update executable tests in the affected implementation repo before app/API
-   implementation.
+9. **Prepare Slice or Feature**
+   Run the relevant preparation command:
+   `/prepare-next-slice`, `/prepare-approved-slice <slice-id>`, or
+   `/prepare-approved-feature <feature-id>`.
 
-10. **Expected Failure**
+10. **Acceptance Tests First**
+    The preparation command creates or reuses the actual implementation branches and adds or
+    updates executable frontend/backend acceptance tests before app/API implementation.
+    For backend/API behavior, this includes backend API Gherkin/Cucumber tests.
+
+11. **Expected Failure**
     Run the new or changed tests and confirm they fail for the expected missing behavior.
 
-11. **Implement**
-    Implement only approved tasks in the affected repo or repos.
+12. **Human Gate 4**
+    Stop. Human reviews test diffs and the preparation artifact. Continue only after the
+    preparation artifact has `status: Approved`.
 
-12. **Validate**
-    Run unit, integration, BDD, E2E, `npm run check`, and build checks where applicable.
+13. **Implement**
+    Run the relevant implementation command. The implementation command must reuse the
+    implementation branches recorded in the approved preparation artifact and implement only
+    approved tasks in the affected repo or repos.
 
-13. **Validation Report**
+14. **Validate**
+    Run unit, integration, frontend BDD, backend API BDD/Cucumber, E2E, `npm run check`, and
+    build checks where applicable.
+
+15. **Validation Report**
     Write a report mapping requirements and scenarios to pass/fail results.
 
-14. **Patch If Needed**
+16. **Patch If Needed**
     If mismatches exist, run the patcher agent for up to 3 scoped attempts.
 
-15. **PR Review**
+17. **PR Review**
     Open PRs in affected implementation repos and stop for human review.
 
-16. **Post-Merge Knowledge Update**
-    After frontend/backend PRs merge, update the knowledge repo with shipped contracts, docs,
-    logs, validation results, and PR links.
+18. **Post-Merge Knowledge Update**
+    After frontend/backend PRs merge, update the knowledge repo with contract references,
+    docs, logs, validation results, and PR links.
 
 ---
 
@@ -756,13 +880,15 @@ The mandated workflow is:
 | Spec approval | `spec.md` status is `Approved` | Yes — blocks plan |
 | Persona anchoring | User stories and functional requirements name the persona and value delivered | Yes — blocks plan/tasks/code |
 | Requirement clarity | EARS requirements are clear and testable | Yes — blocks plan/tasks/code |
-| Gherkin coverage | User-facing or externally observable behavior has Gherkin scenarios | Yes — blocks plan/tasks/code |
+| Gherkin coverage | User-facing or externally observable behavior, including backend/API behavior, has Gherkin scenarios | Yes — blocks plan/tasks/preparation/code |
+| Backend API BDD | Backend/API behavior has backend API Gherkin/Cucumber coverage, or explicit not-applicable evidence | Yes — blocks implementation |
 | Plan approval | `plan.md` status is `Approved` | Yes — blocks tasks |
-| Tasks approval | `tasks.md` status is `Approved` | Yes — blocks implementation |
+| Tasks approval | `tasks.md` status is `Approved` | Yes — blocks preparation |
+| Preparation approval | Slice/feature preparation artifact is `Approved` | Yes — blocks implementation |
 | Technology policy | Implementation follows pinned Retail Nucleus libraries and design constraints | Yes — blocks PR |
 | Data taxonomy | Entity and screen construct tiers are correctly separated | Yes — blocks PR |
-| Contract approval | API contract exists and is approved for full-stack/API work | Yes — blocks implementation |
-| Acceptance-test-first | Executable tests are created before implementation and fail for expected missing behavior | Yes — blocks implementation |
+| Contract approval | `backend/contracts/api-contract.md` exists and is approved/referenced for full-stack/API work | Yes — blocks implementation |
+| Acceptance-test-first | Executable tests are created in preparation before implementation and fail for expected missing behavior | Yes — blocks implementation |
 | Scope control | Work matches approved tasks and repo boundaries | Yes — blocks PR |
 | Validation report | Pass/fail report exists and maps requirements to tests | Yes — blocks PR |
 | Patcher limit | Patcher stops after 3 failed attempts | Yes |
@@ -808,4 +934,4 @@ Runtime mechanics may be further specified in workspace files such as `CLAUDE.md
 `AGENTS.md`, `TECHNOLOGY.md`, and `DATA-TAXONOMY.md` where those files exist. Those files may
 provide implementation details, but they must not weaken the principles in this constitution.
 
-**Version**: 1.0.1 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-07
+**Version**: 1.1.0 | **Ratified**: 2026-07-07 | **Last Amended**: 2026-07-10
