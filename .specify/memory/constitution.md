@@ -16,10 +16,10 @@ Sync Impact Report
 - Templates requiring updates:
   - .claude/commands/prepare-next-slice.md
   - .claude/commands/prepare-approved-slice.md
-  - .claude/commands/prepare-approved-feature.md
+  - .claude/commands/prepare-feature.md
   - .claude/commands/implement-next-slice.md
   - .claude/commands/implement-approved-slice.md
-  - .claude/commands/implement-approved-feature.md
+  - .claude/commands/implement-feature.md
   - .claude/rules/acceptance-test-first.md
   - .claude/rules/contract-first-development.md
   - .claude/rules/validation-reporting.md
@@ -482,7 +482,7 @@ or
 For standalone features:
 
 ```text
-/prepare-approved-feature <feature-id>
+/prepare-feature <feature-id>
 ```
 
 The preparation command must:
@@ -834,7 +834,7 @@ The mandated workflow is:
 9. **Prepare Slice or Feature**
    Run the relevant preparation command:
    `/prepare-next-slice`, `/prepare-approved-slice <slice-id>`, or
-   `/prepare-approved-feature <feature-id>`.
+   `/prepare-feature <feature-id>`.
 
 10. **Acceptance Tests First**
     The preparation command creates or reuses the actual implementation branches and adds or
