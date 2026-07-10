@@ -1,9 +1,9 @@
 ---
-status: In Review
+status: Approved
 artifact_type: slice-preparation
 slice_id: SLICE-11
-approved_by:
-approved_at:
+approved_by: Saad
+approved_at: 10/07/2026
 source_spec: knowledge/specs/001-platform-baseline/spec.md
 source_plan: knowledge/specs/001-platform-baseline/plan.md
 source_tasks: knowledge/specs/001-platform-baseline/tasks.md
@@ -81,9 +81,9 @@ Backend API Gherkin scenarios (e.g. under `backend/tests/features/**`) were **no
 
 ## Human Review Checklist
 
-- [ ] Implementation branches are correct (`agent/slice-11-pricing-autonomy` in both frontend and backend)
-- [ ] Test files match approved requirements and scenarios (REQ-AUTO-001, 005, 008, 009; the two approved Gherkin scenarios)
-- [ ] Tests fail for expected missing behavior only (verified: 404/timeout/TS2307, not unrelated errors)
-- [ ] No production implementation was added (confirmed: only `.feature`, `.steps.ts`, and `.controller.spec.ts` files created)
-- [ ] Backend API Gherkin coverage is present or explicitly not applicable (see decision above — not applicable, contract test used instead, consistent with repo convention)
-- [ ] Approved for implementation
+- [x] Implementation branches are correct (`agent/slice-11-pricing-autonomy` in both frontend and backend)
+- [x] Test files match approved requirements and scenarios (REQ-AUTO-001, 005, 008, 009; the two approved Gherkin scenarios)
+- [x] Tests fail for expected missing behavior only (verified: 404/timeout/TS2307, not unrelated errors)
+- [x] No production implementation was added (confirmed: only `.feature`, `.steps.ts`, and `.controller.spec.ts` files created)
+- [x] Backend API Gherkin coverage is present or explicitly not applicable (see decision above — not applicable, contract test used instead, consistent with repo convention)
+- [x] Approved for implementation
