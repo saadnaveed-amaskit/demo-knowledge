@@ -4,9 +4,9 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| knowledge | 001-platform-baseline | d74974dfa32bb0eaccd07584e810ee6ea13b8ddb |
-| frontend | main | 6ec84dbde0379096cad99a1be3536e0ff1664e4a |
-| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
+| knowledge | 001-platform-baseline | (this finalization commit) |
+| frontend | main | 6bf530564f604a8c9d81d93f076dfe41cb0dfa43 |
+| backend | main | 5f46cc599365cfcd2b3180776eacaa93f5086fd2 |
 
 ## Frontend Dependencies
 
@@ -14,7 +14,7 @@ See the full table in [Frontend Structure](frontend-structure.md#dependencies). 
 
 ## Backend Dependencies
 
-See the full table in [Backend Structure](backend-structure.md#dependencies). Key production dependencies: `@nestjs/common`/`@nestjs/core`/`@nestjs/platform-express` (^11.0.0), `reflect-metadata` (^0.2.2), `rxjs` (^7.8.1). No database driver or ORM package is present in either dependencies or devDependencies.
+See the full table in [Backend Structure](backend-structure.md#dependencies). Key production dependencies: `@nestjs/common`/`@nestjs/core`/`@nestjs/platform-express` (^11.0.0), `reflect-metadata` (^0.2.2), `rxjs` (^7.8.1). No database driver or ORM package is present in either dependencies or devDependencies. SLICE-12 added the backend's first BDD tooling as devDependencies: `@cucumber/cucumber` (^11.2.0) and `ts-node` (^10.9.2, chosen over an esbuild-based loader for `emitDecoratorMetadata` compatibility with NestJS DI).
 
 ## Internal Dependencies
 
@@ -30,9 +30,10 @@ See the full table in [Backend Structure](backend-structure.md#dependencies). Ke
 | frontend: screens/discount-modeling/focus-sets-ref-api.ts | backend `/focus-sets` | `fetch` calls used to populate the focus-group selector in the discount-modeling form |
 | frontend: screens/agents/agents-api.ts | backend `/agents/*` | `fetch` calls to `roster`, `catalog`, `monitors/:id/pause`, `monitors/:id/resume`, `hire`, `task-agents/:id/retire` |
 | frontend: screens/autonomy/autonomy-api.ts | backend `/autonomy/*` | `fetch` calls to `roster`, `action-classes/:id/audit`, `action-classes/:id/promote`, `action-classes/:id/demote`, `live-actions/:id/veto`, `live-actions/:id/undo`, `kill-switch/engage`, `kill-switch/disengage` |
+| frontend: screens/measurement/measurement-api.ts | backend `/measurement/*` | `fetch` calls to list/get experiments, `clusters/:clusterId/move`, `acknowledge-cost`, `go-live`, `scale`, `kill` |
 | frontend: all screens | backend base URL | `import.meta.env.VITE_API_URL ?? "http://localhost:3000"`, per-screen fetch-wrapper module |
 
-Note: `AgentsService` (SLICE-10) and `AutonomyService` (SLICE-11) both have no constructor dependencies on other backend services — each seeds its own in-memory data, unlike `PriceScenariosService`/`ApprovalsService`.
+Note: `AgentsService` (SLICE-10), `AutonomyService` (SLICE-11), and `MeasurementService` (SLICE-12) all have no constructor dependencies on other backend services — each seeds its own in-memory data, unlike `PriceScenariosService`/`ApprovalsService`.
 
 ## Frontend ↔ Backend Boundary
 
@@ -40,9 +41,9 @@ The frontend has no shared HTTP client or React Query layer — each screen fold
 
 ## Contract Dependencies
 
-- **Canonical contract:** `backend/contracts/api-contract.md` (61 endpoints, 70 schemas) — see [Contract Summary](../api/contract-summary.md).
-- **`backend/contracts/api-contract.yaml`** (OpenAPI 3.0.3 structured version) existed at one point but was deleted from `main` in backend commit `bb1a951` — it is not present in the current tree. SLICE-10/11's Agents/Autonomy endpoints and schemas were hand-authored directly into the Markdown for this reason.
-- **Per-slice contract references** under `knowledge/contracts/<slice-id>/contract.md` exist for SLICE-02 through SLICE-11 (10 folders, all `Stable`).
+- **Canonical contract:** `backend/contracts/api-contract.md` (67 endpoints, 78 schemas) — see [Contract Summary](../api/contract-summary.md).
+- **`backend/contracts/api-contract.yaml`** (OpenAPI 3.0.3 structured version) existed at one point but was deleted from `main` in backend commit `bb1a951` — it is not present in the current tree. SLICE-10/11/12's Agents/Autonomy/Measurement endpoints and schemas were hand-authored directly into the Markdown for this reason.
+- **Per-slice contract references** under `knowledge/contracts/<slice-id>/contract.md` exist for SLICE-02 through SLICE-12 (11 folders, all `Stable`).
 
 ## Known Gaps
 

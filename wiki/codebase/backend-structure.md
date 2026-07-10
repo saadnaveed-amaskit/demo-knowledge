@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
+| backend | main | 5f46cc599365cfcd2b3180776eacaa93f5086fd2 |
 
 ## Package Scripts
 
@@ -17,14 +17,16 @@
 | start | `nest start` | Run the app (non-watch) via Nest CLI |
 | start:dev | `nest start --watch` | Run the app in watch/dev mode |
 | test | `jest` | Run the Jest test suite |
+| test:bdd | `cucumber-js` | Run backend API-level Cucumber/BDD scenarios (`tests/features/**/*.feature`), added in SLICE-12 |
 | typecheck | `tsc --noEmit -p tsconfig.json` | Type-check without emitting output |
 
-Jest config is embedded in `package.json` (`rootDir: "src"`, `testRegex: ".*\\.spec\\.ts$"`, `ts-jest` transform).
+Jest config is embedded in `package.json` (`rootDir: "src"`, `testRegex: ".*\\.spec\\.ts$"`, `ts-jest` transform). Cucumber config lives in `cucumber.js` (CJS — the backend has no `"type": "module"`), pointing at `tests/register.js` (installs a `ts-node` compile hook using `tsconfig.tests.json`) before loading `tests/support/**/*.ts` and `tests/steps/**/*.ts`.
 
 ## Dependencies
 
 | Package | Version | Purpose |
 |---|---|---|
+| @cucumber/cucumber | ^11.2.0 | BDD test runner (Cucumber/Gherkin), added in SLICE-12 (dev) |
 | @nestjs/cli | ^11.0.0 | Nest CLI — build/start/schematics commands (dev) |
 | @nestjs/common | ^11.0.0 | Core NestJS decorators/utilities (Controller, Injectable, pipes, exceptions) |
 | @nestjs/core | ^11.0.0 | NestJS framework runtime (DI container, app bootstrap) |
@@ -40,8 +42,9 @@ Jest config is embedded in `package.json` (`rootDir: "src"`, `testRegex: ".*\\.s
 | jest | ^29.7.0 | Test runner/framework (dev) |
 | reflect-metadata | ^0.2.2 | Metadata reflection polyfill required by NestJS decorators |
 | rxjs | ^7.8.1 | Reactive Extensions library used internally by NestJS |
-| supertest | ^7.0.0 | HTTP assertion library for testing Nest controllers/endpoints (dev) |
+| supertest | ^7.0.0 | HTTP assertion library for testing Nest controllers/endpoints; also used by SLICE-12's backend Cucumber steps against an in-process app (dev) |
 | ts-jest | ^29.2.5 | TypeScript transformer for Jest (dev) |
+| ts-node | ^10.9.2 | Real TypeScript compiler used to register backend Cucumber step/support files, added in SLICE-12 — chosen over an esbuild-based loader because NestJS's DI relies on `emitDecoratorMetadata`, which esbuild does not emit (dev) |
 | typescript | ^5.7.2 | TypeScript compiler (dev) |
 | typescript-eslint | ^8.19.0 | TypeScript-aware ESLint rules/parser (dev) |
 
@@ -56,6 +59,7 @@ Jest config is embedded in `package.json` (`rootDir: "src"`, `testRegex: ".*\\.s
 | src/focus-sets/ | CRUD for Focus Sets (named SKU filters) | SLICE-02; condition-tree evaluation in `condition.ts` |
 | src/guardrails/ | CRUD + evaluate for pricing guardrail rules | SLICE-04; hard/advisory severity |
 | src/health/ | Health-check endpoint | SLICE-00 scaffolding |
+| src/measurement/ | Matched-cluster experiment setup + live readout: list/get, move cluster arm, acknowledge cost, go-live (gated), scale, kill | SLICE-12; no dependency on other services |
 | src/price-scenarios/ | CRUD + run/submit/status lifecycle for price scenarios, deep-dive analytics | SLICE-07 / SLICE-08 |
 | src/product-grid/ | Per-Focus-Set product/SKU grid view with SKU exclusion/restoration | SLICE-03 |
 | src/promotions/ | CRUD for promotions with derived status | SLICE-05 |
@@ -82,6 +86,13 @@ Root-level `src/` files: `app.module.ts` (wires all controllers/providers), `mai
 | POST /autonomy/live-actions/:id/undo | Undo an applied live action | SLICE-11 |
 | POST /autonomy/kill-switch/engage | Engage the emergency kill switch | SLICE-11 |
 | POST /autonomy/kill-switch/disengage | Disengage the emergency kill switch | SLICE-11 |
+| GET /measurement/experiments | List all matched-cluster experiments | `measurement.controller.ts`, SLICE-12 |
+| GET /measurement/experiments/:id | Get an experiment (setup state + live readout if launched) | SLICE-12 |
+| POST /measurement/experiments/:id/clusters/:clusterId/move | Move a cluster between treatment and control arms | HttpCode 200, SLICE-12 |
+| POST /measurement/experiments/:id/acknowledge-cost | Acknowledge the cost-of-control tradeoff | HttpCode 200, SLICE-12 |
+| POST /measurement/experiments/:id/go-live | Launch an experiment (gated on balance + cost acknowledgment) | HttpCode 200, SLICE-12 |
+| POST /measurement/experiments/:id/scale | Scale a live experiment's win to all matching SKUs | HttpCode 200, SLICE-12 |
+| POST /measurement/experiments/:id/kill | Kill a live experiment and revert its treatment clusters to BAU | HttpCode 200, SLICE-12 |
 | GET /health | Liveness check | `health.controller.ts` |
 | GET /catalog/attributes | List filterable catalog attributes and observed values | `catalog.controller.ts` |
 | GET /focus-sets | List all focus sets | `focus-sets.controller.ts` |
@@ -146,6 +157,7 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 | src/discount-modeling/discount-modeling.service.ts | In-memory array CRUD + run/submit/status lifecycle; computes KPIs, rollups, risk panels, chart datasets | |
 | src/price-scenarios/price-scenarios.service.ts | In-memory array CRUD + run/submit/status state machine; generates deep-dive analytics | Depends on `FocusSetsService`, `GuardrailsService` |
 | src/approvals/approvals.service.ts | Aggregates pending/decided items across `PriceScenariosService` and `DiscountModelingService`; enforces a mandatory-comment decision policy for deny/request-changes | No entity store of its own; keeps an in-memory decision log |
+| src/measurement/measurement.service.ts | In-memory array CRUD-lite (seeded experiments/blocks/clusters); computes block balance + go-live eligibility fresh on every read; moves cluster arms; go-live/scale/kill lifecycle | No constructor dependencies on other services |
 | src/shared/in-memory-repository.ts | Generic `InMemoryRepository<T>` scaffold | Not used directly by any module's service; a placeholder pending ORM/DB choice |
 
 ## Tests
@@ -154,6 +166,8 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 |---|---|---|
 | src/agents/agents.controller.spec.ts | Controller + service | Roster/catalog reads, pause/resume/hire/retire delegation; second `describe` block tests `BadRequestException` (invalid hire subtype) and `NotFoundException` (unknown monitor id) directly against `AgentsService` |
 | src/autonomy/autonomy.controller.spec.ts | Controller | Roster read, promote-blocked-by-reversibility-ceiling, demote, kill-switch engage/disengage |
+| src/measurement/measurement.controller.spec.ts | Controller | listExperiments, getExperiment (imbalanced + live/win cases), moveCluster, acknowledgeCost, goLive (BadRequestException when ineligible), scale — against a mocked `MeasurementService` |
+| tests/features/measurement.feature + tests/steps/measurement.steps.ts | Backend API BDD (Cucumber) | Go-live blocked when imbalanced, go-live succeeds once balanced + acknowledged, move-cluster clears mlPrice, live experiment win verdict — run via `npm run test:bdd` against a real in-process Nest app (`tests/support/app.ts`), the backend's first Cucumber-driven test suite (SLICE-12) |
 | src/health/health.controller.spec.ts | Controller | Returns `{status: "ok"}` |
 | src/focus-sets/focus-sets.controller.spec.ts | Controller | Catalog attributes, resolve preview, 400 on missing name, full CRUD+duplicate+delete lifecycle |
 | src/focus-sets/focus-sets.service.spec.ts | Service | Filter resolution, create with auto-incremented id, edit-in-place, duplicate, live productCount, delete |
@@ -176,3 +190,4 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 - No ORM or database — confirmed by source inspection (no `@Entity`, `@Column`, `TypeOrmModule`, `PrismaClient`, or DB driver import anywhere in `src/`). All data resets on process restart.
 - No global `ValidationPipe`/class-validator is registered; request bodies are plain TypeScript interfaces with no runtime shape enforcement beyond what individual services check explicitly (per `backend/contracts/api-contract.md`'s `x-global-behavior` note).
 - `src/shared/in-memory-repository.ts` is an unused generic scaffold, explicitly commented as a placeholder pending a persistent ORM/DB decision.
+- The backend's in-memory state is process-wide and has no per-run reset endpoint; running the backend Cucumber suite twice against the same long-running `start:dev` process can leak mutated state between runs (observed during SLICE-12 validation). The suite's own scenarios boot a fresh in-process app per Cucumber invocation, so this only affects manual/back-to-back reruns against a shared dev server, not the suite's own correctness.

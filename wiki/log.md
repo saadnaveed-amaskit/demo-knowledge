@@ -2,6 +2,43 @@
 
 Chronological record of `/update-code-wiki` runs. Newest first.
 
+### 2026-07-10 — finalize-knowledge-after-merge-SLICE-12
+
+| Field | Value |
+|---|---|
+| mode | targeted finalization (`/finalize-knowledge-after-merge SLICE-12`) |
+| knowledge commit | (this finalization commit) |
+| frontend commit | 6bf530564f604a8c9d81d93f076dfe41cb0dfa43 |
+| backend commit | 5f46cc599365cfcd2b3180776eacaa93f5086fd2 |
+| API contract changed | Yes — `backend/contracts/api-contract.md` gained 6 `/measurement/*` endpoints and 8 schemas (in the merged backend PR); not edited by this finalization run itself |
+| validation report | knowledge/specs/001-platform-baseline/validation/SLICE-12.md (front matter updated `Ready for PR` → `Shipped`) |
+| PR links | frontend [#14](https://github.com/saadnaveed-amaskit/demo-frontend/pull/14); backend [#13](https://github.com/saadnaveed-amaskit/demo-backend/pull/13) |
+
+Updated wiki files:
+
+- knowledge/wiki/features/SLICE-12.md (updated — status `Approved — not yet implemented` → `Complete`)
+- knowledge/wiki/index.md (updated — SLICE-12 row → `Complete`; Known Gaps adjusted)
+- knowledge/wiki/architecture/overview.md (updated — slice count, measurement module, backend Cucumber/BDD tooling note, contract endpoint/schema counts, Known Gaps)
+- knowledge/wiki/codebase/frontend-structure.md (updated — `/measurement` route, `MeasurementScreen.tsx`, new BDD test row, Known Gaps)
+- knowledge/wiki/codebase/backend-structure.md (updated — `src/measurement/` module, 6 new routes, new service/test rows, new `@cucumber/cucumber`/`ts-node` devDependencies, `test:bdd` script, Known Gaps)
+- knowledge/wiki/codebase/dependency-map.md (updated — new frontend↔backend dependency row, new backend dev dependencies, contract endpoint/schema counts, per-slice contract folder count)
+- knowledge/wiki/api/contract-summary.md (updated — 6 new endpoints, 8 new schemas, SLICE-12 row in Related Features/Slices, Known Gaps)
+
+Other knowledge files updated (non-wiki):
+
+- knowledge/specs/001-platform-baseline/tasks.md (SLICE-12 `Status:` line, Slice Index table row → `Complete`, task checklists checked off)
+- knowledge/specs/001-platform-baseline/validation/SLICE-12.md (front matter `status: Ready for PR` → `Shipped`; added Finalization/Merged PRs sections)
+- knowledge/contracts/slice-12-measurement/contract.md (created — `status: Stable`; no prior draft existed from the preparation gate, since contract authoring was explicitly deferred to the implementation phase per `tasks.md`'s Backend Tasks)
+
+Templates: all 8 required templates under `knowledge/wiki/_templates/` already existed and were reused as-is; none created or overwritten.
+
+Known gaps:
+
+- `backend/contracts/api-contract.yaml` remains deleted from `main` (commit `bb1a951`); only `api-contract.md` exists. SLICE-12's Measurement entries were hand-authored directly into the Markdown for this reason.
+- `api-contract.md`'s own embedded Source table still shows a pre-merge placeholder ("pending commit on this branch") rather than the final merge SHA `5f46cc5` — not corrected here per the "do not edit api-contract.md" constraint.
+- REQ-MEAS-008 (streaming trend + play/pause/restart), REQ-MEAS-012 (closed-loop Autonomy feedback), and REQ-MEAS-013 (reopen setup) remain unimplemented, per the validation report and the new per-slice contract's Known Gaps.
+- Unlike SLICE-09/10/11, no `knowledge/contracts/slice-12-measurement/contract.md` draft existed prior to this finalization run — the preparation artifact explicitly deferred contract authoring to implementation, and it was not created during implementation either. This finalization run created it directly as `Stable` (documenting the already-merged, already-reviewed implementation) rather than leaving the gap unfilled, to keep the per-slice contract reference convention consistent across all implemented slices.
+
 ### 2026-07-10 — finalize-knowledge-after-merge-SLICE-11
 
 | Field | Value |

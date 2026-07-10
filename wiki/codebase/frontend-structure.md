@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| frontend | main | 6ec84dbde0379096cad99a1be3536e0ff1664e4a |
+| frontend | main | 6bf530564f604a8c9d81d93f076dfe41cb0dfa43 |
 
 ## Package Scripts
 
@@ -79,7 +79,7 @@
 | src/components/ | Shared/reusable UI components | Contains `ui/` subfolder |
 | src/components/ui/ | Low-level reusable UI primitives | `button.tsx`, `input.tsx`, `select.tsx`, `switch.tsx` — no `Sheet`/`Dialog` component exists yet |
 | src/lib/ | Shared utility helpers | `utils.ts` (className merge helper) |
-| src/screens/ | One folder per feature screen | `agents`, `approvals`, `autonomy`, `discount-modeling`, `focus-builder`, `guardrails`, `price-scenarios`, `product-grid`, `promotions`, plus `ScreenPlaceholder.tsx` |
+| src/screens/ | One folder per feature screen | `agents`, `approvals`, `autonomy`, `discount-modeling`, `focus-builder`, `guardrails`, `measurement`, `price-scenarios`, `product-grid`, `promotions`, plus `ScreenPlaceholder.tsx` |
 | src/state.ts | Global Zustand store | App-wide UI state (brand/channel) |
 
 ## Routes
@@ -95,7 +95,7 @@
 | /focus | src/screens/focus-builder/FocusBuilder.tsx | SLICE-02 |
 | /guardrails | src/screens/guardrails/GuardrailsScreen.tsx | SLICE-04 |
 | /like-items | src/screens/ScreenPlaceholder.tsx | Placeholder — SLICE-13 (Like-Item Mapping / Cold Start) not yet implemented |
-| /measurement | src/screens/ScreenPlaceholder.tsx | Placeholder — SLICE-12 (Measurement) not yet implemented |
+| /measurement | src/screens/measurement/MeasurementScreen.tsx | SLICE-12 |
 | /product-grid | src/screens/product-grid/ProductGrid.tsx | SLICE-03; routed but not shown in the sidebar (`UNLISTED_SCREENS`) |
 | /promos | src/screens/promotions/PromotionsScreen.tsx | SLICE-05 |
 | /scenario | src/screens/price-scenarios/PriceScenariosScreen.tsx | SLICE-07 (Deep Dive / SLICE-08 renders inside this screen) |
@@ -114,6 +114,7 @@ All routes render as children of the layout route `path: "/"`, whose element is 
 | DiscountModelingScreen.tsx | src/screens/discount-modeling/DiscountModelingScreen.tsx | Create/run discount models, Nivo charts, RHF/Zod form |
 | FocusBuilder.tsx | src/screens/focus-builder/FocusBuilder.tsx | Build/browse/export Focus Sets |
 | GuardrailsScreen.tsx | src/screens/guardrails/GuardrailsScreen.tsx | Manage pricing guardrails via RHF/Zod |
+| MeasurementScreen.tsx | src/screens/measurement/MeasurementScreen.tsx | Matched-cluster experiment list/detail: block balance chart (Nivo), cluster arm-move, cost-of-control acknowledgment, Go-Live gate, live readout with verdict banner and scale/kill actions |
 | PriceScenariosScreen.tsx | src/screens/price-scenarios/PriceScenariosScreen.tsx | Price scenario creation/output/approval-mode UI with objective sliders and Nivo line chart |
 | ProductGrid.tsx | src/screens/product-grid/ProductGrid.tsx | Browse/curate SKUs within a Focus Set via AG Grid |
 | PromotionsScreen.tsx | src/screens/promotions/PromotionsScreen.tsx | Manage time-boxed promotions (calendar + list), RHF/Zod, date-fns |
@@ -142,6 +143,7 @@ No other `state.ts` files exist elsewhere under `src/`; other screens use local 
 | features/discount-modeling.feature + tests/bdd/steps/discount-modeling.steps.ts | BDD | Discount Modeling (SLICE-06) |
 | features/focus-set-management.feature + tests/bdd/steps/focus-set-management.steps.ts | BDD | Focus Set management (SLICE-02) |
 | features/guardrails-management.feature + tests/bdd/steps/guardrails-management.steps.ts | BDD | Guardrails Management (SLICE-04) |
+| features/measurement.feature + tests/bdd/steps/measurement.steps.ts | BDD | Measurement (SLICE-12) |
 | features/price-scenario.feature + tests/bdd/steps/price-scenario.steps.ts | BDD | Price Scenario Optimization (SLICE-07) |
 | features/pricing-autonomy.feature + tests/bdd/steps/pricing-autonomy.steps.ts | BDD | Pricing Autonomy (SLICE-11) |
 | features/product-grid.feature + tests/bdd/steps/product-grid.steps.ts | BDD | Product Grid (SLICE-03) |
@@ -152,4 +154,5 @@ No other `state.ts` files exist elsewhere under `src/`; other screens use local 
 ## Known Gaps
 
 - No `*.test.tsx`/`*.spec.tsx` unit test exists per screen — `src/App.test.tsx` is the only Vitest file; per-screen coverage relies on the BDD suite.
-- `/config`, `/like-items`, and `/measurement` are `ScreenPlaceholder` routes pending SLICE-12 through SLICE-14.
+- `/config` and `/like-items` are `ScreenPlaceholder` routes pending SLICE-13/14.
+- `MeasurementScreen.tsx` does not implement REQ-MEAS-008 (streaming probability trend with play/pause/restart) or REQ-MEAS-013 (reopen setup from live/complete) — not covered by the approved preparation-gate test scaffolding.

@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
+| backend | main | 5f46cc599365cfcd2b3180776eacaa93f5086fd2 |
 
 ## Canonical Contract
 
@@ -13,7 +13,7 @@
 | Markdown contract | backend/contracts/api-contract.md |
 | YAML source, if present | **Not present.** `backend/contracts/api-contract.yaml` existed on this branch but was deleted from `main` in commit `bb1a951` ("deleted redundant file") before the SLICE-09 merge. |
 
-Note: `api-contract.md`'s own embedded "Source" table currently records `Backend branch: agent/slice-11-pricing-autonomy`, commit "pending commit on this branch" — a placeholder left over from before that branch's PR merged. It has not been regenerated against the current `main` HEAD (`a0e6742`); see Known Gaps.
+Note: `api-contract.md`'s own embedded "Source" table currently records `Backend branch: agent/slice-12-measurement`, commit "pending commit on this branch" — a placeholder left over from before that branch's PR merged. It has not been regenerated against the current `main` HEAD (`5f46cc5`); see Known Gaps.
 
 ## Endpoint Groups
 
@@ -63,6 +63,13 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | PATCH | `/guardrails/{id}/active` | Toggle a guardrail's active flag | guardrails |
 | PATCH | `/guardrails/{id}/overridable` | Toggle a guardrail's isOverridable flag | guardrails |
 | GET | `/health` | Liveness check | health |
+| GET | `/measurement/experiments` | List all matched-cluster experiments | measurement |
+| GET | `/measurement/experiments/{id}` | Get an experiment (setup state + live readout if launched) | measurement |
+| POST | `/measurement/experiments/{id}/clusters/{clusterId}/move` | Move a cluster between treatment and control arms | measurement |
+| POST | `/measurement/experiments/{id}/acknowledge-cost` | Acknowledge the cost-of-control tradeoff | measurement |
+| POST | `/measurement/experiments/{id}/go-live` | Launch an experiment (gated on balance + cost acknowledgment) | measurement |
+| POST | `/measurement/experiments/{id}/scale` | Scale a live experiment's win to all matching SKUs | measurement |
+| POST | `/measurement/experiments/{id}/kill` | Kill a live experiment and revert its treatment clusters to BAU | measurement |
 | GET | `/price-scenarios` | List all price scenarios, newest id first | price-scenarios |
 | POST | `/price-scenarios` | Create a price scenario | price-scenarios |
 | DELETE | `/price-scenarios/{id}` | Delete a price scenario | price-scenarios |
@@ -81,7 +88,7 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | PATCH | `/promotions/{id}` | Partially update a promotion | promotions |
 | GET | `/promotions/{id}/products` | Get the (discounted) product rows for a promotion | promotions |
 
-61 endpoints total, across 11 tags.
+67 endpoints total, across 12 tags.
 
 ## Schemas / Request-Response Objects
 
@@ -98,12 +105,16 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | AuditEntry | Tier-1 canonical audit-trail entry for an action class | autonomy |
 | AutonomyKpis | Derived on every read from the current action-class array — not stored | autonomy |
 | AutonomyRosterView | [NOT SPECIFIED] | autonomy |
+| BlockView | Comparability block grouping a treatment and control cluster pair; `status` computed from `metricMatch` ratios + arm presence | measurement |
 | ChangeRequest | [NOT SPECIFIED] | price-scenarios / approvals |
+| ClusterContribution | Per-cluster contribution to the overall lift signal (readout) | measurement |
+| ClusterView | Read projection of a cluster; `mlPrice` is null while `arm === "control"` | measurement |
 | ComparisonRow | [NOT SPECIFIED] | price-scenarios |
 | ConditionGroupNode | [NOT SPECIFIED] | focus-sets |
 | ConditionNode | Recursive AND/OR condition tree. Enforced max depth is 3 (root group = depth 1), but ONLY on focus-sets create/update — not on POST /focus-sets/resolve | focus-sets |
 | ConditionRuleNode | [NOT SPECIFIED] | focus-sets |
 | CreateDiscountModelDto | [NOT SPECIFIED] | discount-models |
+| CredibleInterval | `{ estimate, lower, upper }` — used for the incremental margin readout figure | measurement |
 | CreateGuardrailDto | [NOT SPECIFIED] | guardrails |
 | CreatePromotionDto | [NOT SPECIFIED] | promotions |
 | CreateScenarioDto | [NOT SPECIFIED] | price-scenarios |
@@ -119,6 +130,7 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | DiscountTileProduct | [NOT SPECIFIED] | price-scenarios (deep-dive) |
 | ErrorResponse | Default Nest HttpException JSON shape (no custom exception filter observed) | shared |
 | EvaluateDto | [NOT SPECIFIED] | guardrails |
+| ExperimentView | Top-level matched-cluster experiment read projection; `goLiveEligible`/`goLiveBlockedReason` computed fresh on every read | measurement |
 | FocusSetBody | [NOT SPECIFIED] | focus-sets |
 | FocusSetView | [NOT SPECIFIED] | focus-sets |
 | FrontierPoint | [NOT SPECIFIED] | price-scenarios |
@@ -131,7 +143,9 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | LiveActionEntity | Tier-1 canonical live (in-flight) autonomous action | autonomy |
 | MarketingTile | [NOT SPECIFIED] | price-scenarios (deep-dive) |
 | MarketingTileProduct | [NOT SPECIFIED] | price-scenarios (deep-dive) |
+| MetricMatch | Per-metric (revenue/grossMargin/velocity) match ratio between a block's treatment and control clusters | measurement |
 | MonitorEntity | Tier-1 canonical standing monitor; in-memory, seeded + hired | agents |
+| MoveClusterDto | Request body for moving a cluster's arm — `{ arm: "treatment" \| "control" }` | measurement |
 | NivoBarDatapoint | [NOT SPECIFIED] | discount-models |
 | NivoLineDatapoint | [NOT SPECIFIED] | discount-models |
 | NivoLineDataset | [NOT SPECIFIED] | discount-models |
@@ -141,6 +155,7 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | PromoProductRow | [NOT SPECIFIED] | promotions |
 | PromoProductsView | [NOT SPECIFIED] | promotions |
 | PromotionEntity | [NOT SPECIFIED] | promotions |
+| ReadoutView | Live readout once an experiment has gone live — probability of winning, day, verdict, incremental margin CI, per-cluster contributions | measurement |
 | Recommendation | [NOT SPECIFIED] | price-scenarios |
 | ResolveResult | [NOT SPECIFIED] | focus-sets |
 | RiskPanel | [NOT SPECIFIED] | discount-models |
@@ -158,7 +173,7 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | UpdateGuardrailDto | All fields optional; server only assigns fields that are not undefined (partial update) | guardrails |
 | UpdatePromotionDto | All fields optional; partial update | promotions |
 
-70 schemas total. `[NOT SPECIFIED]` above means the YAML's `description:` field for that schema was empty at generation time (for pre-SLICE-10 schemas) or intentionally omitted for hand-authored SLICE-10/11 entries with no natural one-line purpose beyond their field table — not an omission introduced by this summary. "Source" column groups schemas by the tag/module that owns them, inferred from usage, not a literal YAML field.
+78 schemas total. `[NOT SPECIFIED]` above means the YAML's `description:` field for that schema was empty at generation time (for pre-SLICE-10 schemas) or intentionally omitted for hand-authored SLICE-10/11/12 entries with no natural one-line purpose beyond their field table — not an omission introduced by this summary. "Source" column groups schemas by the tag/module that owns them, inferred from usage, not a literal YAML field.
 
 ## Related Features / Slices
 
@@ -174,10 +189,12 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | SLICE-09 (Approvals queue) | approvals |
 | SLICE-10 (Agent roster) | agents |
 | SLICE-11 (Pricing Autonomy) | autonomy |
+| SLICE-12 (Measurement) | measurement |
 | catalog, health | [UNKNOWN] — no dedicated slice found in `tasks.md`; catalog/health appear to be foundational scaffolding rather than a numbered slice |
 
 ## Known Gaps
 
-- `api-contract.md`'s embedded Source table still records the pre-merge feature branch/commit (`agent/slice-11-pricing-autonomy`, commit placeholder "pending commit on this branch"), not the current `main` HEAD (`a0e6742`) — it has not been regenerated since the SLICE-11 merge, and cannot be corrected by `/finalize-knowledge-after-merge` per its "do not edit api-contract.md" constraint.
-- `backend/contracts/api-contract.yaml` no longer exists on `main` (deleted in commit `bb1a951`); only the Markdown contract is currently present. SLICE-10/11's Agents/Autonomy endpoints and schemas were hand-authored directly into the Markdown for this reason.
+- `api-contract.md`'s embedded Source table still records the pre-merge feature branch/commit (`agent/slice-12-measurement`, commit placeholder "pending commit on this branch"), not the current `main` HEAD (`5f46cc5`) — it has not been regenerated since the SLICE-12 merge, and cannot be corrected by `/finalize-knowledge-after-merge` per its "do not edit api-contract.md" constraint.
+- `backend/contracts/api-contract.yaml` no longer exists on `main` (deleted in commit `bb1a951`); only the Markdown contract is currently present. SLICE-10/11/12's Agents/Autonomy/Measurement endpoints and schemas were hand-authored directly into the Markdown for this reason.
 - Most pre-SLICE-10 schemas have no `description:` in the original source YAML (`[NOT SPECIFIED]`) — this reflects the YAML's own content, not a gap introduced here.
+- SLICE-12's `BlockView.metricMatch` is typed optional solely so the pre-existing approved contract test's mocks (predating this field) still type-check unmodified — the real endpoint always populates it.
