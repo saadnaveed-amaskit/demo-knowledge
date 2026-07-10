@@ -1,11 +1,28 @@
 ---
-status: Draft
+status: Shipped
 artifact_type: validation-report
 slice_id: SLICE-11
 feature_id: 001-platform-baseline
 ---
 
 # Validation Report — SLICE-11: Pricing Autonomy
+
+## Finalization (post-merge)
+
+| Repo | Branch | Impl commit | Merge SHA (main) | Status |
+|---|---|---|---|---|
+| knowledge | 001-platform-baseline | d74974d | — | Clean |
+| backend | agent/slice-11-pricing-autonomy | 8d6c84b | a0e6742 (PR #12) | Merged |
+| frontend | agent/slice-11-pricing-autonomy | c6fb1ca | 6ec84db (PR #13) | Merged |
+
+## Merged PRs
+
+| Repo | PR | Merged at | Merge SHA |
+|---|---|---|---|
+| frontend | [#13](https://github.com/saadnaveed-amaskit/demo-frontend/pull/13) | 2026-07-10T08:02:58Z | 6ec84dbde0379096cad99a1be3536e0ff1664e4a |
+| backend | [#12](https://github.com/saadnaveed-amaskit/demo-backend/pull/12) | 2026-07-10T08:03:31Z | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
+
+`backend/contracts/api-contract.md` was updated in this slice's line of work (8 new `/autonomy/*` endpoints, 6 new schemas), included in the merged backend PR.
 
 ## Context
 

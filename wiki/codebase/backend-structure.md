@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
+| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
 
 ## Package Scripts
 
@@ -50,6 +50,7 @@ Jest config is embedded in `package.json` (`rootDir: "src"`, `testRegex: ".*\\.s
 | Path | Purpose | Notes |
 |---|---|---|
 | src/agents/ | Agent roster: monitors, derived operators, task agents; hire/pause/resume/retire | SLICE-10; no dependency on other services |
+| src/autonomy/ | Pricing Autonomy: action classes, live actions, audit trail; promote/demote, veto/undo, kill switch | SLICE-11 |
 | src/catalog/ | Exposes catalog-derived filterable attributes | `catalog-data.ts` static SKU dataset + service/controller; no dedicated spec file |
 | src/discount-modeling/ | CRUD + run/submit lifecycle for discount models | SLICE-06 |
 | src/focus-sets/ | CRUD for Focus Sets (named SKU filters) | SLICE-02; condition-tree evaluation in `condition.ts` |
@@ -73,6 +74,14 @@ Root-level `src/` files: `app.module.ts` (wires all controllers/providers), `mai
 | POST /agents/monitors/:id/resume | Resume a monitor | HttpCode 200, SLICE-10 |
 | POST /agents/hire | Hire a monitor or operator from the catalog | SLICE-10 |
 | POST /agents/task-agents/:id/retire | Retire a task agent | HttpCode 200, SLICE-10 |
+| GET /autonomy/roster | Full roster (KPIs, action classes, live actions, kill-switch state) | `autonomy.controller.ts`, SLICE-11 |
+| GET /autonomy/action-classes/:id/audit | Audit trail for an action class | SLICE-11 |
+| POST /autonomy/action-classes/:id/promote | Promote an action class's trust rung (gated) | SLICE-11 |
+| POST /autonomy/action-classes/:id/demote | Demote an action class's trust rung (never gated) | SLICE-11 |
+| POST /autonomy/live-actions/:id/veto | Veto a pending live action | SLICE-11 |
+| POST /autonomy/live-actions/:id/undo | Undo an applied live action | SLICE-11 |
+| POST /autonomy/kill-switch/engage | Engage the emergency kill switch | SLICE-11 |
+| POST /autonomy/kill-switch/disengage | Disengage the emergency kill switch | SLICE-11 |
 | GET /health | Liveness check | `health.controller.ts` |
 | GET /catalog/attributes | List filterable catalog attributes and observed values | `catalog.controller.ts` |
 | GET /focus-sets | List all focus sets | `focus-sets.controller.ts` |
@@ -128,6 +137,7 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 | Path | Purpose | Notes |
 |---|---|---|
 | src/agents/agents.service.ts | In-memory array CRUD-lite (seeded monitors/operators/task agents); hire, pause/resume, retire | No constructor dependencies on other services |
+| src/autonomy/autonomy.service.ts | In-memory array CRUD-lite (seeded action classes/live actions/audit); ordered promotion gates, demote, veto/undo, kill switch | No constructor dependencies on other services |
 | src/catalog/catalog.service.ts | Derives distinct filterable attribute/value options from static `CATALOG_SKUS` data | Read-only, no store |
 | src/focus-sets/focus-sets.service.ts | In-memory `Map`-backed CRUD + duplicate/resolve for Focus Sets | Evaluates condition trees against the catalog |
 | src/product-grid/product-grid.service.ts | Builds grid/product/SKU views for a Focus Set; tracks per-focus-set SKU exclusions | `Map<string, Set<string>>` |
@@ -143,6 +153,7 @@ No global path prefix is set in `main.ts`, so the above are the final, literal r
 | Test file | Type | Notes |
 |---|---|---|
 | src/agents/agents.controller.spec.ts | Controller + service | Roster/catalog reads, pause/resume/hire/retire delegation; second `describe` block tests `BadRequestException` (invalid hire subtype) and `NotFoundException` (unknown monitor id) directly against `AgentsService` |
+| src/autonomy/autonomy.controller.spec.ts | Controller | Roster read, promote-blocked-by-reversibility-ceiling, demote, kill-switch engage/disengage |
 | src/health/health.controller.spec.ts | Controller | Returns `{status: "ok"}` |
 | src/focus-sets/focus-sets.controller.spec.ts | Controller | Catalog attributes, resolve preview, 400 on missing name, full CRUD+duplicate+delete lifecycle |
 | src/focus-sets/focus-sets.service.spec.ts | Service | Filter resolution, create with auto-incremented id, edit-in-place, duplicate, live productCount, delete |

@@ -2,6 +2,18 @@
 
 Chronological record of shipped platform work. Newest first.
 
+## 2026-07-10 — SLICE-11: Pricing Autonomy (SHIPPED)
+
+- **Baseline:** `001-platform-baseline`
+- **Slice status:** Complete
+- **frontend:** PR [#13](https://github.com/saadnaveed-amaskit/demo-frontend/pull/13) merged to `main` — merge SHA `6ec84dbde0379096cad99a1be3536e0ff1664e4a`. `AutonomyScreen` at `/autonomy`: 4-tile KPI strip (total action classes, eligible to promote, total live $ value, avg proof accuracy), action-class cards (Promote/Demote, blocked-reason display), an audit-trail feed for the selected card, and live-supervision rows (Veto/Undo) with a per-row countdown. Emergency kill switch disables Promote/Veto/Undo and pauses the client-side countdown ticker (Demote remains available). Fixed two test-robustness bugs found while rerunning the approved preparation-phase tests: an unscoped `promote-btn` locator (Playwright strict-mode violation across 3 cards) and a missing wait for the async kill-switch engage/refresh round trip; added a `Before` hook resetting in-memory kill-switch state between scenarios.
+- **backend:** PR [#12](https://github.com/saadnaveed-amaskit/demo-backend/pull/12) merged to `main` — merge SHA `a0e6742ed3c7be66f6e37cb420b40029112ad3d9`. `AutonomyController`/`AutonomyService` (8 endpoints: roster, audit, promote, demote, veto, undo, kill-switch engage/disengage). Three new Tier-1 entities — `ActionClassEntity`, `LiveActionEntity`, `AuditEntry` — seeded in-memory (3 action classes, 2 live actions). Promotion gated in order per REQ-AUTO-009: kill switch disengaged → reversibility ceiling (`Low` caps at `Supervised`; `Medium`/`High` cap at `Autonomous`) → sample count ≥100 → accuracy ≥0.85 → acceptance rate ≥0.80. Demote is never gated (REQ-AUTO-006), even while the kill switch is engaged. `backend/contracts/api-contract.md` updated with the 8 new endpoints and 6 new schemas, hand-authored directly since `api-contract.yaml` no longer exists on `main`.
+- **Requirements:** REQ-AUTO-001…010 covered. REQ-AUTO-010 (canonical Agents/Autonomy implementation vs. the Pricing Platform V2 Agentic fork, spec Open Q8) resolved by definition — same reasoning as SLICE-10.
+- **Validation:** `specs/001-platform-baseline/validation/SLICE-11.md` — Shipped (backend 126/126 tests, `npm run check` green on both repos; frontend 32/32 BDD scenarios — 2 new + no regressions, run twice for stability — `npx vitest run` and `npm run check` green). 0 formal patch attempts (2 test-robustness fixes made directly during initial implementation, not a separate patch cycle).
+- **Contracts promoted:** `contracts/slice-11-autonomy/contract.md` Draft → **Stable**.
+- **Open items carried forward:** ORM/DB `[NEEDS CLARIFICATION]`; in-memory store resets on restart; promotion-gate thresholds are v1 placeholders with no historical dataset; kill-switch "freeze" is client-side only (no backend timer concept); `AuditEntry.actor` is a fixed placeholder pending identity-provider integration; SLICE-10's Operator trust data was not unified with SLICE-11's Action Class trust-ladder data (different domain concepts); `backend/contracts/api-contract.yaml` remains absent from `main`.
+- **Next:** SLICE-12 (Measurement, depends on SLICE-07 ✓) is the next `Approved` slice by dependency order; SLICE-13…14 remain `Approved` but depend on other slices or open spec questions.
+
 ## 2026-07-09 — SLICE-10: Agent Roster (SHIPPED)
 
 - **Baseline:** `001-platform-baseline`

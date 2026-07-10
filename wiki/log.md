@@ -2,6 +2,42 @@
 
 Chronological record of `/update-code-wiki` runs. Newest first.
 
+### 2026-07-10 — finalize-knowledge-after-merge-SLICE-11
+
+| Field | Value |
+|---|---|
+| mode | targeted finalization (`/finalize-knowledge-after-merge SLICE-11`) |
+| knowledge commit | d74974dfa32bb0eaccd07584e810ee6ea13b8ddb |
+| frontend commit | 6ec84dbde0379096cad99a1be3536e0ff1664e4a |
+| backend commit | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
+| API contract changed | Yes — `backend/contracts/api-contract.md` gained 8 `/autonomy/*` endpoints and 6 schemas (in the merged backend PR); not edited by this finalization run itself |
+| validation report | knowledge/specs/001-platform-baseline/validation/SLICE-11.md (front matter updated `Draft` → `Shipped`) |
+| PR links | frontend [#13](https://github.com/saadnaveed-amaskit/demo-frontend/pull/13); backend [#12](https://github.com/saadnaveed-amaskit/demo-backend/pull/12) |
+
+Updated wiki files:
+
+- knowledge/wiki/features/SLICE-11.md (created — status `Complete`)
+- knowledge/wiki/index.md (updated — SLICE-11 row → `Complete`; Known Gaps adjusted)
+- knowledge/wiki/architecture/overview.md (updated — slice count, autonomy module, contract endpoint/schema counts, Known Gaps)
+- knowledge/wiki/codebase/frontend-structure.md (updated — `/autonomy` route, `AutonomyScreen.tsx`, new BDD test row, Known Gaps)
+- knowledge/wiki/codebase/backend-structure.md (updated — `src/autonomy/` module, 8 new routes, new service/test rows)
+- knowledge/wiki/codebase/dependency-map.md (updated — new frontend↔backend dependency row, contract endpoint/schema counts, per-slice contract folder count)
+- knowledge/wiki/api/contract-summary.md (updated — 8 new endpoints, 6 new schemas, SLICE-11 row in Related Features/Slices, Known Gaps)
+
+Other knowledge files updated (non-wiki):
+
+- knowledge/specs/001-platform-baseline/tasks.md (SLICE-11 `Status:` line and Slice Index table row → `Complete`)
+- knowledge/specs/001-platform-baseline/validation/SLICE-11.md (front matter `status: Draft` → `Shipped`; added Finalization/Merged PRs sections)
+- knowledge/contracts/slice-11-autonomy/contract.md (front matter `status: Draft` → `Stable`)
+
+Templates: all 8 required templates under `knowledge/wiki/_templates/` already existed and were reused as-is; none created or overwritten.
+
+Known gaps:
+
+- `backend/contracts/api-contract.yaml` remains deleted from `main` (commit `bb1a951`); only `api-contract.md` exists. SLICE-11's Autonomy entries were hand-authored directly into the Markdown for this reason.
+- `api-contract.md`'s own embedded Source table still shows a pre-merge placeholder ("pending commit on this branch") rather than the final merge SHA `a0e6742` — not corrected here per the "do not edit api-contract.md" constraint.
+- SLICE-11's promotion-gate thresholds and kill-switch freeze semantics remain v1 deterministic placeholders.
+
 ### 2026-07-09 — finalize-knowledge-after-merge-SLICE-10
 
 | Field | Value |

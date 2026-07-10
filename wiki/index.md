@@ -4,9 +4,9 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| knowledge | 001-platform-baseline | a4e1d373afcda411ba6adcf8868e1aed258aa4b5 |
-| frontend | main | 05d5371ef41b813ad369cd598d8ca982a40afa55 |
-| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
+| knowledge | 001-platform-baseline | d74974dfa32bb0eaccd07584e810ee6ea13b8ddb |
+| frontend | main | 6ec84dbde0379096cad99a1be3536e0ff1664e4a |
+| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
 
 ## Architecture
 
@@ -37,7 +37,7 @@
 | [SLICE-08](features/SLICE-08.md) | Deep Dive | Complete |
 | [SLICE-09](features/SLICE-09.md) | Approvals queue | Complete |
 | [SLICE-10](features/SLICE-10.md) | Agent roster | Complete |
-| [SLICE-11](features/SLICE-11.md) | Pricing Autonomy | Approved — not yet implemented |
+| [SLICE-11](features/SLICE-11.md) | Pricing Autonomy | Complete |
 | [SLICE-12](features/SLICE-12.md) | Measurement | Approved — not yet implemented |
 | [SLICE-13](features/SLICE-13.md) | Like-Item Mapping (Cold Start) | Approved — not yet implemented |
 | [SLICE-14](features/SLICE-14.md) | Configuration | Approved — not yet implemented |
@@ -49,6 +49,6 @@
 ## Known Gaps
 
 - `backend/contracts/api-contract.yaml` was deleted from `main` (commit `bb1a951`) after being added; only `backend/contracts/api-contract.md` currently exists.
-- `backend/contracts/api-contract.md`'s own embedded Source table has not been regenerated since the SLICE-10 merge and still shows a pre-merge placeholder.
-- SLICE-11 through SLICE-14 are `Approved` in `knowledge/specs/001-platform-baseline/tasks.md` but have no implementation, contract, or validation report yet.
+- `backend/contracts/api-contract.md`'s own embedded Source table has not been regenerated since the SLICE-11 merge and still shows a pre-merge placeholder.
+- SLICE-12 through SLICE-14 are `Approved` in `knowledge/specs/001-platform-baseline/tasks.md` but have no implementation, contract, or validation report yet.
 - A pre-existing, unrelated file `knowledge/wiki/shipped-features.md` (predating this templated wiki, covering only SLICE-00/01) was left untouched — it is not part of the generated wiki structure and may be superseded by this index/log going forward.

@@ -4,9 +4,9 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| knowledge | 001-platform-baseline | a4e1d373afcda411ba6adcf8868e1aed258aa4b5 |
-| frontend | main | 05d5371ef41b813ad369cd598d8ca982a40afa55 |
-| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
+| knowledge | 001-platform-baseline | d74974dfa32bb0eaccd07584e810ee6ea13b8ddb |
+| frontend | main | 6ec84dbde0379096cad99a1be3536e0ff1664e4a |
+| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
 
 ## Frontend Dependencies
 
@@ -29,9 +29,10 @@ See the full table in [Backend Structure](backend-structure.md#dependencies). Ke
 | frontend: screens/discount-modeling/discount-modeling-api.ts | backend `/discount-models/*` | `fetch` calls to list/create/run/submit/delete endpoints |
 | frontend: screens/discount-modeling/focus-sets-ref-api.ts | backend `/focus-sets` | `fetch` calls used to populate the focus-group selector in the discount-modeling form |
 | frontend: screens/agents/agents-api.ts | backend `/agents/*` | `fetch` calls to `roster`, `catalog`, `monitors/:id/pause`, `monitors/:id/resume`, `hire`, `task-agents/:id/retire` |
+| frontend: screens/autonomy/autonomy-api.ts | backend `/autonomy/*` | `fetch` calls to `roster`, `action-classes/:id/audit`, `action-classes/:id/promote`, `action-classes/:id/demote`, `live-actions/:id/veto`, `live-actions/:id/undo`, `kill-switch/engage`, `kill-switch/disengage` |
 | frontend: all screens | backend base URL | `import.meta.env.VITE_API_URL ?? "http://localhost:3000"`, per-screen fetch-wrapper module |
 
-Note: `AgentsService` (SLICE-10) has no constructor dependencies on other backend services — it seeds its own monitors/operators/task-agents in-memory, unlike `PriceScenariosService`/`ApprovalsService`.
+Note: `AgentsService` (SLICE-10) and `AutonomyService` (SLICE-11) both have no constructor dependencies on other backend services — each seeds its own in-memory data, unlike `PriceScenariosService`/`ApprovalsService`.
 
 ## Frontend ↔ Backend Boundary
 
@@ -39,9 +40,9 @@ The frontend has no shared HTTP client or React Query layer — each screen fold
 
 ## Contract Dependencies
 
-- **Canonical contract:** `backend/contracts/api-contract.md` (53 endpoints, 64 schemas) — see [Contract Summary](../api/contract-summary.md).
-- **`backend/contracts/api-contract.yaml`** (OpenAPI 3.0.3 structured version) existed at one point but was deleted from `main` in backend commit `bb1a951` — it is not present in the current tree. SLICE-10's Agents endpoints/schemas were hand-authored directly into the Markdown for this reason.
-- **Per-slice contract references** under `knowledge/contracts/<slice-id>/contract.md` exist for SLICE-02 through SLICE-10 (9 folders, all `Stable`).
+- **Canonical contract:** `backend/contracts/api-contract.md` (61 endpoints, 70 schemas) — see [Contract Summary](../api/contract-summary.md).
+- **`backend/contracts/api-contract.yaml`** (OpenAPI 3.0.3 structured version) existed at one point but was deleted from `main` in backend commit `bb1a951` — it is not present in the current tree. SLICE-10/11's Agents/Autonomy endpoints and schemas were hand-authored directly into the Markdown for this reason.
+- **Per-slice contract references** under `knowledge/contracts/<slice-id>/contract.md` exist for SLICE-02 through SLICE-11 (10 folders, all `Stable`).
 
 ## Known Gaps
 

@@ -49,7 +49,7 @@ Delivery proceeds one slice at a time, dependency-ordered, contract-first and ac
 | SLICE-08 | Deep Dive | Complete | frontend, backend | SLICE-07 | P2 |
 | SLICE-09 | Approvals queue | Complete | frontend, backend | SLICE-06, SLICE-07, SLICE-04 | P2 |
 | SLICE-10 | Agent roster | Complete | frontend, backend | SLICE-01 | P3 |
-| SLICE-11 | Pricing Autonomy | Approved | frontend, backend | SLICE-10 | P3 |
+| SLICE-11 | Pricing Autonomy | Complete | frontend, backend | SLICE-10 | P3 |
 | SLICE-12 | Measurement | Approved | frontend, backend | SLICE-07 | P3 |
 | SLICE-13 | Like-Item Mapping (Cold Start) | Approved | frontend, backend | SLICE-02 | P3 |
 | SLICE-14 | Configuration | Approved | frontend, backend | SLICE-01 | P3 |
@@ -635,7 +635,7 @@ Expected PRs:
 
 ## Slice `SLICE-11` — `Pricing Autonomy`
 
-Status: In Review
+Status: Complete
 
 Target repos:
 - frontend, backend

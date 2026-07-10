@@ -4,7 +4,7 @@
 
 | Repo | Branch | Commit SHA |
 |---|---|---|
-| backend | main | a18bdff033c9dac4a90c365c547446057da3ae9b |
+| backend | main | a0e6742ed3c7be66f6e37cb420b40029112ad3d9 |
 
 ## Canonical Contract
 
@@ -13,7 +13,7 @@
 | Markdown contract | backend/contracts/api-contract.md |
 | YAML source, if present | **Not present.** `backend/contracts/api-contract.yaml` existed on this branch but was deleted from `main` in commit `bb1a951` ("deleted redundant file") before the SLICE-09 merge. |
 
-Note: `api-contract.md`'s own embedded "Source" table currently records `Backend branch: agent/slice-10-agent-roster`, commit "pending commit on this branch" — a placeholder left over from before that branch's PR merged. It has not been regenerated against the current `main` HEAD (`a18bdff`); see Known Gaps.
+Note: `api-contract.md`'s own embedded "Source" table currently records `Backend branch: agent/slice-11-pricing-autonomy`, commit "pending commit on this branch" — a placeholder left over from before that branch's PR merged. It has not been regenerated against the current `main` HEAD (`a0e6742`); see Known Gaps.
 
 ## Endpoint Groups
 
@@ -31,6 +31,14 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | GET | `/approvals/queue` | List pending price scenarios and discount models awaiting decision | approvals |
 | POST | `/approvals/scenarios/{id}/decision` | Approve, deny, or request changes on a pending price scenario | approvals |
 | GET | `/approvals/scenarios/{id}/review` | Get the full scenario output for approval-mode review | approvals |
+| GET | `/autonomy/action-classes/{id}/audit` | Get the audit trail for an action class | autonomy |
+| POST | `/autonomy/action-classes/{id}/demote` | Demote an action class's trust rung (never gated) | autonomy |
+| POST | `/autonomy/action-classes/{id}/promote` | Promote an action class's trust rung (gated) | autonomy |
+| POST | `/autonomy/kill-switch/disengage` | Disengage the emergency kill switch | autonomy |
+| POST | `/autonomy/kill-switch/engage` | Engage the emergency kill switch | autonomy |
+| POST | `/autonomy/live-actions/{id}/undo` | Undo an applied live action | autonomy |
+| POST | `/autonomy/live-actions/{id}/veto` | Veto a pending live action | autonomy |
+| GET | `/autonomy/roster` | Get the full autonomy roster (KPIs, action classes, live actions, kill-switch state) | autonomy |
 | GET | `/catalog/attributes` | List filterable catalog attributes and their observed values | catalog |
 | GET | `/discount-models` | List all discount models, newest id first | discount-models |
 | POST | `/discount-models` | Create a discount model | discount-models |
@@ -73,12 +81,13 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | PATCH | `/promotions/{id}` | Partially update a promotion | promotions |
 | GET | `/promotions/{id}/products` | Get the (discounted) product rows for a promotion | promotions |
 
-53 endpoints total, across 10 tags.
+61 endpoints total, across 11 tags.
 
 ## Schemas / Request-Response Objects
 
 | Name | Purpose | Source |
 |---|---|---|
+| ActionClassEntity | Tier-1 canonical action class — the unit of trust-ladder governance | autonomy |
 | AgentCatalogView | Fixed, hardcoded provisionable catalog (monitor/operator types) | agents |
 | AgentKpis | Derived on every read from the current monitors/operators/taskAgents arrays — not stored | agents |
 | AgentRosterView | [NOT SPECIFIED] | agents |
@@ -86,6 +95,9 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | ApprovalsDecidedView | [NOT SPECIFIED] | approvals |
 | ApprovalsQueueView | [NOT SPECIFIED] | approvals |
 | AttributeOption | [NOT SPECIFIED] | catalog |
+| AuditEntry | Tier-1 canonical audit-trail entry for an action class | autonomy |
+| AutonomyKpis | Derived on every read from the current action-class array — not stored | autonomy |
+| AutonomyRosterView | [NOT SPECIFIED] | autonomy |
 | ChangeRequest | [NOT SPECIFIED] | price-scenarios / approvals |
 | ComparisonRow | [NOT SPECIFIED] | price-scenarios |
 | ConditionGroupNode | [NOT SPECIFIED] | focus-sets |
@@ -115,6 +127,8 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | GuardrailEvaluationResult | [NOT SPECIFIED] | guardrails |
 | HealthStatus | [NOT SPECIFIED] | health |
 | HireDto | Plain TS interface — zero runtime enum validation on `kind`; only `subtype` is checked | agents |
+| KillSwitchState | [NOT SPECIFIED] | autonomy |
+| LiveActionEntity | Tier-1 canonical live (in-flight) autonomous action | autonomy |
 | MarketingTile | [NOT SPECIFIED] | price-scenarios (deep-dive) |
 | MarketingTileProduct | [NOT SPECIFIED] | price-scenarios (deep-dive) |
 | MonitorEntity | Tier-1 canonical standing monitor; in-memory, seeded + hired | agents |
@@ -144,7 +158,7 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | UpdateGuardrailDto | All fields optional; server only assigns fields that are not undefined (partial update) | guardrails |
 | UpdatePromotionDto | All fields optional; partial update | promotions |
 
-64 schemas total. `[NOT SPECIFIED]` above means the YAML's `description:` field for that schema was empty at generation time (for pre-SLICE-10 schemas) or intentionally omitted for hand-authored SLICE-10 entries with no natural one-line purpose beyond their field table — not an omission introduced by this summary. "Source" column groups schemas by the tag/module that owns them, inferred from usage, not a literal YAML field.
+70 schemas total. `[NOT SPECIFIED]` above means the YAML's `description:` field for that schema was empty at generation time (for pre-SLICE-10 schemas) or intentionally omitted for hand-authored SLICE-10/11 entries with no natural one-line purpose beyond their field table — not an omission introduced by this summary. "Source" column groups schemas by the tag/module that owns them, inferred from usage, not a literal YAML field.
 
 ## Related Features / Slices
 
@@ -159,10 +173,11 @@ Note: `api-contract.md`'s own embedded "Source" table currently records `Backend
 | SLICE-08 (Deep Dive) | price-scenarios (`/price-scenarios/{id}/deep-dive` + deep-dive schemas) |
 | SLICE-09 (Approvals queue) | approvals |
 | SLICE-10 (Agent roster) | agents |
+| SLICE-11 (Pricing Autonomy) | autonomy |
 | catalog, health | [UNKNOWN] — no dedicated slice found in `tasks.md`; catalog/health appear to be foundational scaffolding rather than a numbered slice |
 
 ## Known Gaps
 
-- `api-contract.md`'s embedded Source table still records the pre-merge feature branch/commit (`agent/slice-10-agent-roster`, commit placeholder "pending commit on this branch"), not the current `main` HEAD (`a18bdff`) — it has not been regenerated since the SLICE-10 merge, and cannot be corrected by `/finalize-knowledge-after-merge` per its "do not edit api-contract.md" constraint.
-- `backend/contracts/api-contract.yaml` no longer exists on `main` (deleted in commit `bb1a951`); only the Markdown contract is currently present. SLICE-10's Agents endpoints/schemas were hand-authored directly into the Markdown for this reason.
+- `api-contract.md`'s embedded Source table still records the pre-merge feature branch/commit (`agent/slice-11-pricing-autonomy`, commit placeholder "pending commit on this branch"), not the current `main` HEAD (`a0e6742`) — it has not been regenerated since the SLICE-11 merge, and cannot be corrected by `/finalize-knowledge-after-merge` per its "do not edit api-contract.md" constraint.
+- `backend/contracts/api-contract.yaml` no longer exists on `main` (deleted in commit `bb1a951`); only the Markdown contract is currently present. SLICE-10/11's Agents/Autonomy endpoints and schemas were hand-authored directly into the Markdown for this reason.
 - Most pre-SLICE-10 schemas have no `description:` in the original source YAML (`[NOT SPECIFIED]`) — this reflects the YAML's own content, not a gap introduced here.
