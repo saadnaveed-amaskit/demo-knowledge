@@ -1,0 +1,119 @@
+name: constitution-alignment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'PLATFORM-REQUIREMENTS.md'
+      - 'requirements/**'
+  workflow_dispatch:
+    inputs:
+      file_path:
+        description: "Path to requirements file to check (relative to repo root)"
+        required: true
+
+jobs:
+  constitution-alignment:
+    name: Check constitution alignment
+    runs-on: claude-runner
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect requirements files
+        id: detect
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "files=${{ inputs.file_path }}" >> $GITHUB_OUTPUT
+          else
+            git fetch origin "$BASE_REF"
+            FILES=$(git diff --name-only "origin/$BASE_REF"...HEAD \
+              | grep -E '^(PLATFORM-REQUIREMENTS\.md|requirements/.+\.md)$' || true)
+            echo "files=$FILES" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check constitution alignment
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FILES: ${{ steps.detect.outputs.files }}
+        run: |
+          if [ -z "$FILES" ]; then
+            echo "No requirements files changed — skipping constitution alignment check."
+            exit 0
+          fi
+
+          if [ ! -f ".specify/memory/constitution.md" ]; then
+            echo "ERROR: .specify/memory/constitution.md not found — cannot check alignment."
+            exit 1
+          fi
+
+          FAILED=0
+
+          for FILE in $FILES; do
+            echo "=== Checking constitution alignment: $FILE ==="
+
+            if [ ! -f "$FILE" ]; then
+              echo "  ERROR: file not found — $FILE"
+              FAILED=1
+              continue
+            fi
+
+            {
+              echo "You are a CI quality gate checking whether a requirements document contradicts the project constitution."
+              echo ""
+              echo "PROJECT CONSTITUTION:"
+              echo "===================="
+              cat ".specify/memory/constitution.md"
+              echo ""
+              echo "REQUIREMENTS DOCUMENT UNDER REVIEW ($FILE):"
+              echo "============================================"
+              cat "$FILE"
+              echo ""
+              echo "TASK:"
+              echo "Check whether the requirements document contradicts or violates the project constitution."
+              echo "Focus only on genuine contradictions — not style, completeness, or things the requirements are simply silent on."
+              echo ""
+              echo "Check for:"
+              echo "- Personas: only Pricing Team, Pricing Strategist, Executive, Admin, Marketing are valid — flag any others"
+              echo "- Technology stack: pinned libraries must not be substituted"
+              echo "- Data taxonomy: Tier-1 domain records must use *Entity; Tier-2 screen constructs use *View/*Row/*Form/*Filters/*State/*Option"
+              echo "- Architectural constraints: multi-repo boundaries, governance rules"
+              echo "- Scope: anything the constitution explicitly marks as out of scope"
+              echo ""
+              echo "A requirement that is simply silent on something the constitution specifies is NOT a violation."
+              echo "Only flag requirements that actively contradict a specific constitution rule."
+              echo ""
+              echo "Respond with exactly one of the following formats:"
+              echo ""
+              echo "If no violations found:"
+              echo "CONSTITUTION_ALIGNMENT: PASS"
+              echo ""
+              echo "If violations found:"
+              echo "CONSTITUTION_ALIGNMENT: FAIL"
+              echo "Violation 1: [quote from requirements] contradicts [specific rule in constitution]"
+              echo "Violation 2: ..."
+            } > /tmp/claude-prompt-constitution.txt
+
+            RESPONSE=$(claude --print "$(cat /tmp/claude-prompt-constitution.txt)")
+            echo "$RESPONSE"
+
+            if echo "$RESPONSE" | grep -q "CONSTITUTION_ALIGNMENT: FAIL"; then
+              FAILED=1
+            fi
+
+            echo ""
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo "constitution-alignment FAILED — resolve violations before merging."
+            exit 1
+          fi
+
+          echo "constitution-alignment PASSED."

@@ -1,0 +1,111 @@
+name: requirements-lint
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'PLATFORM-REQUIREMENTS.md'
+      - 'requirements/**'
+  workflow_dispatch:
+    inputs:
+      file_path:
+        description: "Path to requirements file to lint (relative to repo root)"
+        required: true
+
+jobs:
+  lint:
+    name: Lint requirements document
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect requirements files
+        id: detect
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "files=${{ inputs.file_path }}" >> $GITHUB_OUTPUT
+          else
+            git fetch origin "$BASE_REF"
+            FILES=$(git diff --name-only "origin/$BASE_REF"...HEAD \
+              | grep -E '^(PLATFORM-REQUIREMENTS\.md|requirements/.+\.md)$' || true)
+            echo "files=$FILES" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run lint checks
+        env:
+          FILES: ${{ steps.detect.outputs.files }}
+        run: |
+          if [ -z "$FILES" ]; then
+            echo "No requirements files changed — skipping lint."
+            exit 0
+          fi
+
+          FAILED=0
+
+          for FILE in $FILES; do
+            echo "=== Linting: $FILE ==="
+
+            if [ ! -f "$FILE" ]; then
+              echo "  ERROR: file not found — $FILE"
+              FAILED=1
+              continue
+            fi
+
+            CONTENT=$(cat "$FILE")
+
+            # --- Check 1: Vague words ---
+            VAGUE=$(echo "$CONTENT" | grep -inE '\b(fast|easy|simple|quickly|robust|scalable|flexible|seamless|intuitive|user-friendly)\b' || true)
+            if [ -n "$VAGUE" ]; then
+              echo "  ❌ VAGUE LANGUAGE found — replace with measurable criteria:"
+              echo "$VAGUE" | head -5 | sed 's/^/     /'
+              FAILED=1
+            else
+              echo "  ✅ No vague language"
+            fi
+
+            # --- Check 2: Unresolved placeholders ---
+            PLACEHOLDERS=$(echo "$CONTENT" | grep -inE '\b(TBD|TODO|FIXME)\b|\[TO BE DETERMINED\]|\[PLACEHOLDER\]' || true)
+            if [ -n "$PLACEHOLDERS" ]; then
+              echo "  ❌ UNRESOLVED PLACEHOLDERS found — resolve before merging:"
+              echo "$PLACEHOLDERS" | head -5 | sed 's/^/     /'
+              FAILED=1
+            else
+              echo "  ✅ No unresolved placeholders"
+            fi
+
+            # --- Check 3: Personas present ---
+            KNOWN_PERSONAS="Pricing Team|Pricing Strategist|Executive|Admin|Marketing"
+            PERSONA_MATCH=$(echo "$CONTENT" | grep -iE "($KNOWN_PERSONAS)" | head -1 || true)
+            if [ -z "$PERSONA_MATCH" ]; then
+              echo "  ❌ NO PERSONA found — at least one must be named (Pricing Team, Pricing Strategist, Executive, Admin, Marketing)"
+              FAILED=1
+            else
+              echo "  ✅ Persona found"
+            fi
+
+            # --- Check 4: Requirements present (FR-/REQ-/shall/EARS) ---
+            REQ_MATCH=$(echo "$CONTENT" | grep -iE '(FR-[A-Z]+-[0-9]+|REQ-[A-Z]+-[0-9]+|\bshall\b|Given |When |Then )' | head -1 || true)
+            if [ -z "$REQ_MATCH" ]; then
+              echo "  ❌ NO REQUIREMENTS found — doc must contain functional requirements (FR-XX-## or REQ-XX-## or EARS 'shall' statements)"
+              FAILED=1
+            else
+              echo "  ✅ Requirements present"
+            fi
+
+            echo ""
+          done
+
+          if [ "$FAILED" -eq 1 ]; then
+            echo "requirements-lint FAILED — fix the issues above before merging."
+            exit 1
+          fi
+
+          echo "requirements-lint PASSED."
