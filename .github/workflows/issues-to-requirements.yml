@@ -1,0 +1,83 @@
+name: issues-to-requirements
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-stub:
+    name: Create requirements stub
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create stub file and branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+        run: |
+          # Next FR number — count existing FR-*.md files + 1
+          mkdir -p requirements
+          EXISTING=$(ls requirements/FR-*.md 2>/dev/null | wc -l)
+          FR_NUM=$(printf "%02d" $((EXISTING + 1)))
+
+          # Slugify: lowercase, strip special chars, spaces to hyphens
+          SLUG=$(echo "$ISSUE_TITLE" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's/[^a-z0-9 ]//g' \
+            | sed 's/ \+/-/g' \
+            | sed 's/^-\|-$//g')
+
+          BRANCH="requirements/FR-${FR_NUM}-${SLUG}"
+          FILE="requirements/FR-${FR_NUM}-${SLUG}.md"
+
+          echo "FR number : FR-${FR_NUM}"
+          echo "Slug      : ${SLUG}"
+          echo "Branch    : ${BRANCH}"
+          echo "File      : ${FILE}"
+
+          # Create branch off main
+          git checkout -b "$BRANCH"
+
+          # Write stub
+          {
+            echo "# FR-${FR_NUM} — ${ISSUE_TITLE}"
+            echo ""
+            echo "Source issue: ${ISSUE_URL}"
+            echo "Status: Draft"
+            echo ""
+            echo "## Personas Served"
+            echo "<!-- Who benefits from this feature -->"
+            echo ""
+            echo "## Functional Requirements"
+            echo "<!-- EARS format: When X, the system shall Y -->"
+            echo ""
+            echo "## Acceptance Scenarios"
+            echo "<!-- Gherkin: Given / When / Then -->"
+            echo ""
+            echo "## Out of Scope"
+            echo "<!-- What this FR does not cover -->"
+          } > "$FILE"
+
+          # Commit and push
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "$FILE"
+          git commit -m "stub: FR-${FR_NUM} — ${ISSUE_TITLE}"
+          git push origin "$BRANCH"
+
+          # Comment on the issue
+          gh issue comment "$ISSUE_NUMBER" --body "**Requirements stub created.**
+
+File: \`${FILE}\`
+Branch: \`${BRANCH}\`
+
+Fill out the stub on that branch — personas, EARS requirements, Gherkin scenarios — then open a PR. The 4 CI quality gates will run automatically on the PR."
